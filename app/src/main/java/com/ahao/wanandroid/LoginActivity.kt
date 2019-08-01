@@ -1,21 +1,34 @@
 package com.ahao.wanandroid
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.support.v7.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_login.*
+import android.util.Log
+class LoginActivity : Activity() {
 
-class LoginActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        Log.e("ss","dddddd1111111")
+        initEvent()
     }
 
-    companion object {
-        fun newIntent(context: Context) {
-            val intent = Intent(context, MainActivity.javaClass)
-            context.startActivity(intent)
+    private fun initEvent() {
+        login.run {
+            setOnClickListener{
+
+            }
         }
     }
+
+    companion object{
+        fun actionStart(context: Context){
+            Intent(context,LoginActivity::class.java).run {
+                context.startActivity(this)
+            }
+        }
+    }
+
 }
