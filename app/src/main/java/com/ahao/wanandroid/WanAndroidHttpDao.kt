@@ -1,6 +1,7 @@
 package com.ahao.wanandroid
 
 import com.ahao.wanandroid.bean.request.LoginRequest
+import com.ahao.wanandroid.bean.response.JsonResult
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.POST
@@ -9,5 +10,5 @@ import retrofit2.http.POST
 interface WanAndroidHttpDao {
 
     @POST(API.LOGIN)
-    fun login(@Body request: LoginRequest) : Observable<String>
+    fun login(@Body request: LoginRequest) : Observable<JsonResult<String>>
 }

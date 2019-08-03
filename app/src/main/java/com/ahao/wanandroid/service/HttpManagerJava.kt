@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.ahao.wanandroid.service
 
 import com.ahao.wanandroid.API
@@ -12,6 +14,7 @@ object HttpManagerJava {
 
     private val daoMap = HashMap<String, Any?>()
 
+    @Suppress("UNCHECKED_CAST")
     fun <T> getDao(clazz: Class<T>): T? {
         if (daoMap[clazz.simpleName] == null) {
             daoMap[clazz.simpleName] = createDao(clazz)
