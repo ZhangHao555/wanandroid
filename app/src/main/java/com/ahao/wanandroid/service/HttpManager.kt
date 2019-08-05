@@ -21,12 +21,14 @@ object HttpManager {
         return daoMap[clazz.simpleName] as T
     }
 
-    private fun <T> createDao(clazz: Class<T>): T{
+    private fun <T> createDao(clazz: Class<T>): T {
         val annotation = clazz.getAnnotation(BaseUrl::class.java)
         val baseUrl = annotation?.value ?: API.BASE_URL
 
         val client = OkHttpClient.Builder().apply {
-            addInterceptor(HttpLoggingInterceptor())
+            addInterceptor(HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            })
             connectTimeout(30, TimeUnit.SECONDS)
             readTimeout(30, TimeUnit.SECONDS)
             writeTimeout(30, TimeUnit.SECONDS)

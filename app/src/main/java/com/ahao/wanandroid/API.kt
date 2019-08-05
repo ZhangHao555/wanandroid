@@ -7,4 +7,5 @@ object API {
     const val LOG_OUT = "user/logout/json"
     const val OFFICIAL_ACCOUNT_TAB = "wxarticle/chapters/json"
     const val BANNER = "banner/json"
+    const val MAIN_PAGE_LIST = "article/list/{page}/json"
 }
