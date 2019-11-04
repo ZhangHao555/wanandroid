@@ -1,12 +1,14 @@
 package com.ahao.wanandroid
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 
 class App : Application() {
 
-    companion object{
-        var context : Context? = null
+    companion object {
+        @SuppressLint("StaticFieldLeak")
+        lateinit var context: Context
     }
 
 

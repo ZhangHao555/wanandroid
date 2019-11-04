@@ -7,10 +7,11 @@ import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import com.ahao.wanandroid.user.LoginActivity
 import com.ahao.wanandroid.util.CacheUtil
+import com.ahao.wanandroid.util.Preference
 
 class LaunchingActivity : Activity() {
 
-    private val userToken: String = "USER_TOKEN"
+    private val userToken: String by Preference(Constant.TOKEN,"")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         jump()
