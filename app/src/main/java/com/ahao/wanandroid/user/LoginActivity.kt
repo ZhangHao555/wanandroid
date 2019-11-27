@@ -8,6 +8,7 @@ import android.text.TextUtils
 import com.ahao.wanandroid.MainActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import com.ahao.wanandroid.R
+import com.ahao.wanandroid.UserRepository
 import com.ahao.wanandroid.bean.request.LoginRequest
 import com.ahao.wanandroid.service.ServiceManager
 import com.ahao.wanandroid.service.WanAndroidHttpService
@@ -39,6 +40,7 @@ class LoginActivity : Activity() {
                                         flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                                         this@LoginActivity.startActivity(this)
                                     }
+                                    UserRepository
                                 } else {
                                     ToastUtil.toast(it.errorMsg)
                                 }

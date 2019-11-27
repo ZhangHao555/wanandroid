@@ -6,6 +6,7 @@ import com.ahao.wanandroid.bean.request.LoginRequest
 import com.ahao.wanandroid.bean.request.RegisterRequest
 import com.ahao.wanandroid.bean.response.JsonResult
 import com.ahao.wanandroid.bean.response.MainPageListResponse
+import com.ahao.wanandroid.bean.response.UserInfo
 import com.google.gson.JsonElement
 import io.reactivex.Observable
 import retrofit2.http.*
@@ -16,7 +17,7 @@ interface WanAndroidHttpDao {
     @POST(API.LOGIN)
     @FormUrlEncoded
     fun login(@Field("username") username: String?,
-              @Field("password") password: String?): Observable<JsonResult<JsonElement>>
+              @Field("password") password: String?): Observable<JsonResult<UserInfo>>
 
     @POST(API.REGISTER)
     @FormUrlEncoded

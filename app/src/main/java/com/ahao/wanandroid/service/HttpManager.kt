@@ -4,6 +4,7 @@ package com.ahao.wanandroid.service
 
 import com.ahao.wanandroid.API
 import com.ahao.wanandroid.BaseUrl
+import com.ahao.wanandroid.common.CookieInterceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -29,6 +30,8 @@ object HttpManager {
             addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
+
+            addInterceptor(CookieInterceptor())
             connectTimeout(30, TimeUnit.SECONDS)
             readTimeout(30, TimeUnit.SECONDS)
             writeTimeout(30, TimeUnit.SECONDS)
