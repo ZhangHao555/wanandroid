@@ -2,8 +2,6 @@ package com.ahao.wanandroid.dao
 
 import com.ahao.wanandroid.API
 import com.ahao.wanandroid.BaseUrl
-import com.ahao.wanandroid.bean.request.LoginRequest
-import com.ahao.wanandroid.bean.request.RegisterRequest
 import com.ahao.wanandroid.bean.response.JsonResult
 import com.ahao.wanandroid.bean.response.MainPageListResponse
 import com.ahao.wanandroid.bean.response.UserInfo
