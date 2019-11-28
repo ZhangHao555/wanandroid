@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 
 class BannerPageSnapHelper : PagerSnapHelper() {
-    var infinite = false
+    var loop = false
     private var horizontalHelper: OrientationHelper? = null
 
 
@@ -34,7 +34,7 @@ class BannerPageSnapHelper : PagerSnapHelper() {
 
         return if (forwardDirection) {
             if (centerPosition == layoutManager.itemCount - 1) {
-                if (infinite) 0 else layoutManager.itemCount - 1
+                if (loop) 0 else layoutManager.itemCount - 1
             } else {
                 centerPosition + 1
             }

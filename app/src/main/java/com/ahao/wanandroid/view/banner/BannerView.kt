@@ -1,71 +1,71 @@
 package com.ahao.wanandroid.view.banner
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Handler
+import android.os.Message
 import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import com.ahao.wanandroid.R
-import com.ahao.wanandroid.util.getDisplayMetrics
-import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.view_banner_view.view.*
 import kotlin.math.abs
 
 open class BannerView : FrameLayout {
 
-    var canScroll = true
+    var setting = BannerSetting()
+    var layoutManager: BannerLayoutManager = BannerLayoutManager()
+    var snapHelper = BannerPageSnapHelper()
+    var adapter: RecyclerView.Adapter<*>? = null
+    var indicator: Indicator? = null
+
+    companion object {
+        private const val START_SCROLL = 1
+        private const val STOP_SCROLL = 2
+        private const val CONTINUE_SCROLL = 3
+    }
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attributeSet: AttributeSet?) : super(context, attributeSet) {
         init()
     }
 
+    private val timerHandler = @SuppressLint("HandlerLeak")
+    object : Handler() {
+        override fun handleMessage(msg: Message?) {
+            if (msg != null) {
+                when (msg.what) {
+                    START_SCROLL -> {
+                        var curPos = layoutManager.getCurrentPosition()
+                        banner_recycler_view.smoothScrollToPosition(++curPos)
+                        sendEmptyMessageDelayed(CONTINUE_SCROLL, layoutManager.smoothScrollTime.toLong())
+                    }
+                    CONTINUE_SCROLL -> startAutoSlide()
+                    STOP_SCROLL -> removeCallbacksAndMessages(null)
+                }
+            }
+        }
+    }
+
     private fun init() {
         LayoutInflater.from(context).inflate(R.layout.view_banner_view, this, true)
-        banner_recycler_view.layoutManager = ScaleBannerLayoutManager()
-        banner_recycler_view.adapter = Adapter()
-        BannerPageSnapHelper().run {
-            infinite = true
-            attachToRecyclerView(banner_recycler_view)
-        }
-    }
-
-
-    inner class Adapter : RecyclerView.Adapter<ViewHolder>() {
-        private val data = listOf("https://www.wanandroid.com/blogimgs/fa822a30-00fc-4e0d-a51a-d704af48205c.jpeg",
-                "https://www.wanandroid.com/blogimgs/62c1bd68-b5f3-4a3c-a649-7ca8c7dfabe6.png",
-                "https://www.wanandroid.com/blogimgs/90c6cc12-742e-4c9f-b318-b912f163b8d0.png")
-
-        override fun onCreateViewHolder(group: ViewGroup, position: Int): ViewHolder {
-            val item = LayoutInflater.from(context).inflate(R.layout.view_banner_item_view, group, false)
-            return ViewHolder(item)
-        }
-
-        override fun getItemCount() = data.size
-
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.image.layoutParams?.width = (getDisplayMetrics(context).widthPixels * 0.85f).toInt()
-            Glide.with(context).load(data[position]).into(holder.image)
-        }
-
-    }
-
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val image: ImageView = itemView.findViewById(R.id.banner_image)
     }
 
     private var actionDownX: Float = 0.toFloat()
     private var actionDownY: Float = 0.toFloat()
+
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
-        if(ev == null){
+        if (ev == null) {
             return super.dispatchTouchEvent(ev)
         }
-        when(ev.action){
-            MotionEvent.ACTION_DOWN -> requestDisallowInterceptTouchEvent(true)
+        when (ev.action) {
+            MotionEvent.ACTION_DOWN -> {
+                requestDisallowInterceptTouchEvent(true)
+                stopAutoSlide()
+            }
             MotionEvent.ACTION_MOVE -> {
                 val moveX = ev.x
                 val moveY = ev.y
@@ -75,13 +75,63 @@ open class BannerView : FrameLayout {
                     parent.requestDisallowInterceptTouchEvent(false)
                 }
 
-                if (!canScroll) {
+                if (!setting.slideByTouch) {
                     return false
+                }
+            }
+
+            MotionEvent.ACTION_UP -> {
+                if (setting.autoSlide) {
+                    startAutoSlide()
                 }
             }
         }
 
         return super.dispatchTouchEvent(ev)
+    }
+
+    fun startAutoSlide() {
+        timerHandler.sendEmptyMessageDelayed(START_SCROLL, setting.slideTimeGap)
+
+        banner_recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                indicator?.onScrolled(dx,dx.toFloat() / layoutManager.itemWidth)
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == SCROLL_STATE_IDLE) {
+                    indicator?.onViewSelected(layoutManager.getCurrentPosition())
+                }
+            }
+
+        })
+    }
+
+    fun stopAutoSlide() {
+        timerHandler.sendEmptyMessage(STOP_SCROLL)
+    }
+
+    fun setUp(setting: BannerSetting, adapter: RecyclerView.Adapter<*>) {
+        this.setting = setting
+        this.adapter = adapter
+
+        layoutManager.apply {
+            loop = setting.loop
+            smoothScrollTime = setting.autoSlideSpeed
+
+        }
+
+        banner_recycler_view.adapter = adapter
+        banner_recycler_view.layoutManager = layoutManager
+        snapHelper.attachToRecyclerView(banner_recycler_view)
+        snapHelper.loop = setting.loop
+
+        if (setting.autoSlide) {
+            startAutoSlide()
+        }
     }
 
 }

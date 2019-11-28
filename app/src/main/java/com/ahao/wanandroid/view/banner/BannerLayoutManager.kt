@@ -12,9 +12,8 @@ open class BannerLayoutManager : RecyclerView.LayoutManager(), RecyclerView.Smoo
     var itemWidth: Int = 0
 
     private var hasLayout = false
-    private var smoothScrollTime = 500
-    private var infinite: Boolean = true
-
+    var smoothScrollTime = 500
+    var loop: Boolean = true
 
     override fun generateDefaultLayoutParams(): RecyclerView.LayoutParams {
         return RecyclerView.LayoutParams(RecyclerView.LayoutParams.MATCH_PARENT, RecyclerView.LayoutParams.WRAP_CONTENT)
@@ -50,7 +49,7 @@ open class BannerLayoutManager : RecyclerView.LayoutManager(), RecyclerView.Smoo
             measureChildWithMargins(viewForPosition, 0, 0)
             offsetX += layoutItem(viewForPosition, offsetX)
         }
-        if (itemCount >= 3 && infinite) {
+        if (itemCount >= 3 && loop) {
             layoutLeftItem(recycler)
         }
         doWithItem()
@@ -99,9 +98,7 @@ open class BannerLayoutManager : RecyclerView.LayoutManager(), RecyclerView.Smoo
         return realScroll
     }
 
-    open fun doWithItem() {
-
-    }
+    open fun doWithItem() {}
 
     private fun scrollToRight(dx: Int, recycler: RecyclerView.Recycler, realScroll: Int): Int {
         var realScroll = realScroll
@@ -110,11 +107,11 @@ open class BannerLayoutManager : RecyclerView.LayoutManager(), RecyclerView.Smoo
             val left = getDecoratedLeft(leftChild!!)
             if (left + abs(dx) > paddingLeft) {
                 val position = getPosition(leftChild)
-                if (!infinite && position == 0) {
+                if (!loop && position == 0) {
                     break
                 }
 
-                val addPosition = if (infinite) (position - 1 + itemCount) % itemCount else position - 1
+                val addPosition = if (loop) (position - 1 + itemCount) % itemCount else position - 1
                 val addView = recycler.getViewForPosition(addPosition)
                 addView(addView, 0)
                 measureChildWithMargins(addView, 0, 0)
@@ -152,11 +149,11 @@ open class BannerLayoutManager : RecyclerView.LayoutManager(), RecyclerView.Smoo
             val decoratedRight = getDecoratedRight(rightView!!)
             if (decoratedRight - dx < mOrientationHelper.totalSpace) {
                 val position = getPosition(rightView)
-                if (!infinite && position == itemCount - 1) {
+                if (!loop && position == itemCount - 1) {
                     break
                 }
 
-                val addPosition = if (infinite) (position + 1) % itemCount else position + 1
+                val addPosition = if (loop) (position + 1) % itemCount else position + 1
                 val lastViewAdd = recycler.getViewForPosition(addPosition)
                 addView(lastViewAdd)
                 measureChildWithMargins(lastViewAdd, 0, 0)
@@ -188,8 +185,8 @@ open class BannerLayoutManager : RecyclerView.LayoutManager(), RecyclerView.Smoo
 
     fun getCurrentPosition(): Int {
         for (i in 0 until childCount) {
-            val childAt = getChildAt(i)
-            if (getDecoratedLeft(childAt!!) >= 0 && getDecoratedRight(childAt) <= mOrientationHelper.totalSpace) {
+            val childAt = getChildAt(i) ?: continue
+            if (getDecoratedLeft(childAt) >= 0 && getDecoratedRight(childAt) <= mOrientationHelper.totalSpace) {
                 return getPosition(childAt)
             }
         }
@@ -198,16 +195,16 @@ open class BannerLayoutManager : RecyclerView.LayoutManager(), RecyclerView.Smoo
 
     override fun smoothScrollToPosition(recyclerView: RecyclerView?, state: RecyclerView.State?, targetPosition: Int) {
         var targetPosition = targetPosition
-        if (!infinite && (targetPosition < 0 || targetPosition > itemCount - 1)) {
+        if (!loop && (targetPosition < 0 || targetPosition > itemCount - 1)) {
             return
         }
-        if (infinite || itemCount > 0) {
+        if (loop || itemCount > 0) {
             targetPosition = (targetPosition % itemCount + itemCount) % itemCount
         }
 
         recyclerView!!.requestFocus()
         val currentPosition = getCurrentPosition()
-        val offset = if (currentPosition == itemCount - 1 && targetPosition == 0 && infinite) {
+        val offset = if (currentPosition == itemCount - 1 && targetPosition == 0 && loop) {
             itemWidth
         } else {
             (targetPosition - currentPosition) * itemWidth
