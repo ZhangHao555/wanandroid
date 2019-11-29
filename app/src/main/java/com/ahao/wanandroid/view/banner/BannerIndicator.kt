@@ -4,9 +4,9 @@ import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
+import android.widget.FrameLayout
 
-class BannerIndicator(context: Context?, attrs: AttributeSet?) : ViewGroup(context, attrs) ,Indicator{
+class BannerIndicator(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs), Indicator {
 
     var unselectedRect = mutableListOf<Rect>()
     var selectedRect = mutableListOf<Rect>()
@@ -28,7 +28,7 @@ class BannerIndicator(context: Context?, attrs: AttributeSet?) : ViewGroup(conte
         }
 
     var selectedPosition: Int = 0
-    var selectedOffset : Int = 0
+    var selectedOffset: Int = 0
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
@@ -37,10 +37,10 @@ class BannerIndicator(context: Context?, attrs: AttributeSet?) : ViewGroup(conte
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        if (adapter == null || adapter!!.getItemCount() + 1 != childCount  ) {
+        if (adapter == null || adapter!!.getItemCount() + 1 != childCount) {
             return
         }
-        if(unselectedRect.size <= 0){
+        if (unselectedRect.size <= 0) {
             initRects()
         }
         layoutBackground()
@@ -88,43 +88,36 @@ class BannerIndicator(context: Context?, attrs: AttributeSet?) : ViewGroup(conte
     }
 
     private fun layoutSelectedView() {
-        if(adapter == null){
+        if (adapter == null) {
             return
         }
         val rect = selectedRect[selectedPosition]
         val selectedView = getChildAt(adapter!!.getItemCount())
         val left = rect.left + selectedOffset
-        selectedView.layout(left,rect.top,rect.left + selectedView.measuredWidth,rect.bottom)
+        selectedView.layout(left, rect.top, rect.left + selectedView.measuredWidth, rect.bottom)
 
     }
 
     private fun layoutBackground() {
-        (0 until  unselectedRect.size).forEach {
+        (0 until unselectedRect.size).forEach {
             val rect = unselectedRect[it]
-            getChildAt(it).layout(rect.left,rect.top,rect.right,rect.bottom)
+            getChildAt(it).layout(rect.left, rect.top, rect.right, rect.bottom)
         }
     }
 
 
-    class Adapter {
-        fun getItemCount(): Int {
-            return 0
-        }
+    abstract class Adapter {
+        abstract fun getItemCount(): Int
 
-        fun getUnselectedView(context: Context): View {
-            return View(context)
-        }
+        abstract fun getUnselectedView(context: Context): View
 
-        fun getSelectedView(context: Context): View {
-            return View(context)
-        }
-
-
+        abstract fun getSelectedView(context: Context): View
     }
 
     override fun onViewSelected(position: Int) {
         selectedPosition = position
         selectedOffset = 0
+        requestLayout()
     }
 
     override fun onScrolled(dx: Int, ratio: Float) {

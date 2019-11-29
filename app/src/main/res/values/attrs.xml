@@ -7,4 +7,8 @@
         <attr name="drawStyle"/>
     </declare-styleable>
 
+    <declare-styleable name="CircleView">
+        <attr name="circleColor" format="color" />
+    </declare-styleable>
+
 </resources>

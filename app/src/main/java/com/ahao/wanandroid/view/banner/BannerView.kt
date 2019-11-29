@@ -6,6 +6,7 @@ import android.os.Handler
 import android.os.Message
 import androidx.recyclerview.widget.RecyclerView
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.widget.FrameLayout
