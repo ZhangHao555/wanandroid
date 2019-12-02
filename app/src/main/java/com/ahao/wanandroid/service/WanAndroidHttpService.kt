@@ -8,6 +8,7 @@ import com.ahao.wanandroid.bean.response.UserInfo
 import com.ahao.wanandroid.dao.WanAndroidHttpDao
 import com.google.gson.JsonElement
 import io.reactivex.Observable
+import retrofit2.Call
 
 class WanAndroidHttpService {
 
@@ -19,7 +20,7 @@ class WanAndroidHttpService {
         return getDao(WanAndroidHttpDao::class.java).register(request.username, request.password, request.repassword)
     }
 
-    fun getMainPageList(pageIndex: Int): Observable<JsonResult<MainPageListResponse>> {
+    fun getMainPageList(pageIndex: Int): Call<JsonResult<MainPageListResponse>> {
         return getDao(WanAndroidHttpDao::class.java).getMainPageList(pageIndex)
     }
 

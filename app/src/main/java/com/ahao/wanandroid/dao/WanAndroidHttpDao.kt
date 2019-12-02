@@ -7,6 +7,7 @@ import com.ahao.wanandroid.bean.response.MainPageListResponse
 import com.ahao.wanandroid.bean.response.UserInfo
 import com.google.gson.JsonElement
 import io.reactivex.Observable
+import retrofit2.Call
 import retrofit2.http.*
 
 @BaseUrl(API.BASE_URL)
@@ -24,5 +25,5 @@ interface WanAndroidHttpDao {
                  @Field("repassword") repassword: String?): Observable<JsonResult<JsonElement>>
 
     @GET(API.MAIN_PAGE_LIST)
-    fun getMainPageList(@Path("page") page:Int):Observable<JsonResult<MainPageListResponse>>
+    fun getMainPageList(@Path("page") page:Int): Call<JsonResult<MainPageListResponse>>
 }
