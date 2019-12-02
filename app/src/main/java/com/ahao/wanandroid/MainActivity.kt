@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                 supportFragmentManager.beginTransaction().hide(it).commit()
             }
         }
-        if (!fragment?.isAdded) {
+        if (!fragment.isAdded) {
             supportFragmentManager.beginTransaction().add(R.id.fragment_layout, fragment).commit()
         } else {
             supportFragmentManager.beginTransaction().show(fragment).commit()

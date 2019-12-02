@@ -9,14 +9,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.ahao.bannerview.BannerIndicator
+import com.ahao.bannerview.BannerSetting
+import com.ahao.bannerview.CircleView
+import com.ahao.bannerview.ScaleBannerLayoutManager
 import com.ahao.wanandroid.R
 import com.ahao.wanandroid.baseview.BaseFragment
 import com.ahao.wanandroid.util.dp2px
 import com.ahao.wanandroid.util.getDisplayMetrics
-import com.ahao.wanandroid.view.CircleView
-import com.ahao.wanandroid.view.banner.BannerIndicator
-import com.ahao.wanandroid.view.banner.BannerSetting
-import com.ahao.wanandroid.view.banner.ScaleBannerLayoutManager
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_home_page.*
 
@@ -33,17 +33,17 @@ class HomePageFragment : BaseFragment(), HomeContract.View {
 
     private fun initData() {
         banner_view.layoutManager = ScaleBannerLayoutManager()
-        banner_indicator.adapter = object : BannerIndicator.Adapter(){
+        banner_indicator.adapter = object : BannerIndicator.Adapter() {
 
             override fun getItemCount(): Int = data.size
 
-            override fun getUnselectedView(context: Context) = CircleView(context,null).apply {
-                radius = dp2px(context,2.5f)
+            override fun getUnselectedView(context: Context) = CircleView(context, null).apply {
+                radius = dp2px(context, 2.5f)
                 color = Color.parseColor("#E6E6E6")
             }
 
-            override fun getSelectedView(context: Context) = CircleView(context,null).apply {
-                radius = dp2px(context,2.5f)
+            override fun getSelectedView(context: Context) = CircleView(context, null).apply {
+                radius = dp2px(context, 2.5f)
                 color = Color.parseColor("#FFFFFF")
             }
         }
@@ -59,7 +59,7 @@ class HomePageFragment : BaseFragment(), HomeContract.View {
         return R.layout.fragment_home_page
     }
 
-    private val data = listOf("https://s3.qsxt.info/news/201911/shejinetnews/20180814/1534251303903814.jpg",
+    private val data = listOf("https://www.wanandroid.com/blogimgs/fa822a30-00fc-4e0d-a51a-d704af48205c.jpeg",
             "https://www.wanandroid.com/blogimgs/62c1bd68-b5f3-4a3c-a649-7ca8c7dfabe6.png",
             "https://www.wanandroid.com/blogimgs/90c6cc12-742e-4c9f-b318-b912f163b8d0.png")
 

@@ -10,6 +10,6 @@ interface HomeContract {
     }
 
     interface Presenter : BasePresenter{
-        fun loadData()
+        suspend fun loadBannerData()
     }
 }
