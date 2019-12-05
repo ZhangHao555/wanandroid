@@ -1,6 +1,6 @@
 package com.ahao.wanandroid.bean.response
 
-class MainPageListResponse(var curPage: Int?,
+data class MainPageListResponse(var curPage: Int?,
                            var datas: MutableList<Item>,
                            var offset: Int,
                            var over: Boolean,
@@ -8,7 +8,7 @@ class MainPageListResponse(var curPage: Int?,
                            var size: Int,
                            var total: Int) {
 
-    class Item(var apkLink: String,
+   data class Item(var apkLink: String,
                var author: String,
                var chapterId: Int,
                var chapterName: String,
@@ -33,5 +33,5 @@ class MainPageListResponse(var curPage: Int?,
                var visible: Int,
                var zan: Int)
 
-    class Tag(var name: String, var url: String)
+   data class Tag(var name: String, var url: String)
 }

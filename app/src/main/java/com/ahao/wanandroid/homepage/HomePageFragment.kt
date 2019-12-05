@@ -3,6 +3,7 @@ package com.ahao.wanandroid.homepage
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,22 +14,31 @@ import com.ahao.bannerview.BannerIndicator
 import com.ahao.bannerview.BannerSetting
 import com.ahao.bannerview.CircleView
 import com.ahao.bannerview.ScaleBannerLayoutManager
+import com.ahao.wanandroid.App.Companion.context
 import com.ahao.wanandroid.R
 import com.ahao.wanandroid.baseview.BaseFragment
+import com.ahao.wanandroid.bean.response.MainPageListResponse
 import com.ahao.wanandroid.util.dp2px
 import com.ahao.wanandroid.util.getDisplayMetrics
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.fragment_home_page.*
+import kotlinx.coroutines.*
 
 class HomePageFragment : BaseFragment(), HomeContract.View {
+    override fun showData(listResponse: MainPageListResponse?) {
+
+    }
+
+    override fun showErrorView(message: String) {
+    }
+
     override var presenter: HomeContract.Presenter = HomePagePresenter(this)
 
-    override fun showData() {
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initData()
+        initDataSource()
     }
 
     private fun initData() {
@@ -53,6 +63,11 @@ class HomePageFragment : BaseFragment(), HomeContract.View {
             autoSlideSpeed = 1000
             loop = true
         }, Adapter())
+    }
+
+    private fun initDataSource() {
+        presenter.loadBannerData(0)
+
     }
 
     override fun getLayoutRes(): Int {
