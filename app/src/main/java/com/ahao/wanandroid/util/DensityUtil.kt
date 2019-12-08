@@ -3,6 +3,8 @@ package com.ahao.wanandroid.util
 import android.content.Context
 import android.util.DisplayMetrics
 import android.view.WindowManager
+import androidx.core.content.ContextCompat.getSystemService
+import com.ahao.wanandroid.App
 
 fun getDisplayMetrics(context: Context): DisplayMetrics {
     val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
@@ -11,8 +13,15 @@ fun getDisplayMetrics(context: Context): DisplayMetrics {
     return metrics
 }
 
-fun dp2px(context: Context, dpValue: Float): Int {
-    val scale = context.resources.displayMetrics.density
+fun getDisplayMetrics(): DisplayMetrics {
+    val windowManager = App.context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    val metrics = DisplayMetrics()
+    windowManager.defaultDisplay.getMetrics(metrics)
+    return metrics
+}
+
+fun dp2px( dpValue: Float): Int {
+    val scale = App.context.resources.displayMetrics.density
     return (dpValue * scale + 0.5f).toInt()
 }
 

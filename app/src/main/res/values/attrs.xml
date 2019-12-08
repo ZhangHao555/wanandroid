@@ -11,4 +11,13 @@
         <attr name="circleColor" format="color" />
     </declare-styleable>
 
+    <declare-styleable name="TagView">
+        <attr name="borderWidth" format="dimension" />
+        <attr name="borderColor" format="color" />
+        <attr name="borderRadius" format="dimension" />
+        <attr name="drawStyle">
+            <enum name="stroke" value="1" />
+            <enum name="fill" value="2" />
+        </attr>
+    </declare-styleable>
 </resources>

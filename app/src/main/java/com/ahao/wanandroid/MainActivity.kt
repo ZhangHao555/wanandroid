@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -18,6 +20,17 @@ class MainActivity : AppCompatActivity() {
     private var fragments: List<Fragment> = listOf(HomePageFragment(), InterviewPageFragment(), QuestionAndAnswerFragment(), MineFragment())
     private var currentFragment: Fragment? = null
 
+    private val icons = arrayOf(arrayOf(R.mipmap.home_page_selected,
+            R.mipmap.interview_guide_selected,
+            R.mipmap.ask_every_day_selected,
+            R.mipmap.my_page_selected),
+            arrayOf(R.mipmap.home_page_unselected,
+                    R.mipmap.interview_guide_unselected,
+                    R.mipmap.ask_every_day_unselected,
+                    R.mipmap.my_page_unselected))
+
+    private lateinit var buttons: Array<TextView>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -27,31 +40,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initData() {
+        buttons = arrayOf(home_page, interview_guide, ask_every_day, my_page)
         switchFragment(fragments[0])
     }
 
     private fun initEvent() {
-        text1.run {
-            setOnClickListener {
-                switchFragment(fragments[0])
-            }
-        }
-
-        text2.run {
-            setOnClickListener {
-                switchFragment(fragments[1])
-            }
-        }
-
-        text3.run {
-            setOnClickListener {
-                switchFragment(fragments[2])
-            }
-        }
-
-        text4.run {
-            setOnClickListener {
-                switchFragment(fragments[3])
+        buttons.forEach { it ->
+            it.setOnClickListener {
+                switchFragment(fragments[buttons.indexOf(it)])
             }
         }
     }
@@ -60,11 +56,13 @@ class MainActivity : AppCompatActivity() {
         if (currentFragment == fragment) {
             return
         }
+
         supportFragmentManager.fragments.forEach {
             if (it.isAdded && !it.isHidden) {
                 supportFragmentManager.beginTransaction().hide(it).commit()
             }
         }
+
         if (!fragment.isAdded) {
             supportFragmentManager.beginTransaction().add(R.id.fragment_layout, fragment).commit()
         } else {
@@ -72,6 +70,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         currentFragment = fragment
+        if (currentFragment != null) {
+            val indexOf = fragments.indexOf(currentFragment!!)
+            (buttons.indices).forEach {
+                val drawable = if (it == indexOf) getDrawable(icons[0][it]) else getDrawable(icons[1][it])
+                buttons[it].setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null)
+            }
+        }
     }
 
     inner class Adapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
@@ -82,7 +87,6 @@ class MainActivity : AppCompatActivity() {
         override fun getCount(): Int {
             return fragments.count()
         }
-
     }
 
     companion object {

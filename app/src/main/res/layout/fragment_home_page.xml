@@ -7,7 +7,7 @@
     <com.ahao.bannerview.BannerView
         android:id="@+id/banner_view"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="140dp"
         android:layout_marginTop="10dp"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -20,13 +20,13 @@
         app:layout_constraintEnd_toEndOf="@id/banner_view"
         app:layout_constraintStart_toStartOf="@id/banner_view" />
 
-    <TextView
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:background="#C06363"
-        android:gravity="center"
-        android:text="HOME_PAGE"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/banner_view" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
