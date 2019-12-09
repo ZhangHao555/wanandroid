@@ -1,6 +1,5 @@
 package com.ahao.wanandroid.homepage
 
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
@@ -50,21 +49,23 @@ class HomePageFragment : BaseFragment(), HomeContract.View {
         }
     }
 
-
     private fun initData() {
         banner_view.layoutManager = ScaleBannerLayoutManager()
         banner_indicator.adapter = object : BannerIndicator.Adapter() {
+            override fun getItemCount() = data.size
 
-            override fun getItemCount(): Int = data.size
-
-            override fun getUnselectedView(context: Context) = CircleView(context, null).apply {
-                radius = dp2px(2.5f)
-                color = Color.parseColor("#E6E6E6")
+            override fun addUnselectedView(parent: BannerIndicator){
+                val circleView = CircleView(parent.context).also {
+                    it.color = Color.parseColor("#E6E6E6")
+                }
+                parent.addView(circleView, dp2px(6f), dp2px( 6f))
             }
 
-            override fun getSelectedView(context: Context) = CircleView(context, null).apply {
-                radius = dp2px(2.5f)
-                color = Color.parseColor("#FFFFFF")
+            override fun addSelectedView(parent: BannerIndicator){
+                val circleView = CircleView(parent.context).also {
+                    it.color = Color.parseColor("#FF00CEAA")
+                }
+                parent.addView(circleView, dp2px( 6f), dp2px( 6f))
             }
         }
         banner_view.indicator = banner_indicator
