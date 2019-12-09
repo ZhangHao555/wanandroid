@@ -7,11 +7,14 @@ import com.ahao.wanandroid.bean.response.MainPageListResponse
 interface HomeContract {
 
     interface View : BaseView<Presenter> {
-        fun showData(listResponse: MainPageListResponse?)
+        fun showData(listResponse: MainPageListResponse)
+        fun showMore(listResponse: MainPageListResponse)
         fun showErrorView(message: String)
+        fun showToast(message: String)
     }
 
     interface Presenter : BasePresenter {
-        fun loadBannerData(index: Int)
+        fun loadHomeListData()
+        fun loadMoreHomeListData()
     }
 }

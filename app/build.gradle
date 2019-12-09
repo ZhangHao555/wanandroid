@@ -45,6 +45,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'com.github.bumptech.glide:glide:4.10.0'
     implementation 'com.github.ZhangHao555:BannerRecyclerView:1.1.2@aar'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0'
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines"

@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.fragment_home_page.*
 
 class HomePageFragment : BaseFragment(), HomeContract.View {
 
+
     override var presenter: HomeContract.Presenter = HomePagePresenter(this)
     private val dataSource: MutableList<MainPageListResponse.Item> = mutableListOf()
     private val adapter = HomePageAdapter(dataSource, R.layout.view_home_list_item)
@@ -45,7 +46,14 @@ class HomePageFragment : BaseFragment(), HomeContract.View {
                 val intent = InfoDetailActivity.newIntent(activity, dataSource[position].link)
                 startActivity(intent)
             }
+        }
 
+        swipe_refresh_layout.setOnRefreshListener {
+            initDataSource()
+        }
+
+        swipe_refresh_layout.setOnLoadMoreListener {
+            presenter.loadMoreHomeListData()
         }
     }
 
@@ -84,19 +92,15 @@ class HomePageFragment : BaseFragment(), HomeContract.View {
     }
 
     private fun initDataSource() {
-        presenter.loadBannerData(0)
-
+        presenter.loadHomeListData()
     }
 
-    override fun showData(listResponse: MainPageListResponse?) {
-        if (listResponse?.datas == null) {
-            return
-        }
+    override fun showData(listResponse: MainPageListResponse) {
+        finishLoadView()
         dataSource.clear()
         dataSource.addAll(listResponse.datas)
         adapter.notifyDataSetChanged()
     }
-
 
     override fun getLayoutRes(): Int {
         return R.layout.fragment_home_page
@@ -130,4 +134,21 @@ class HomePageFragment : BaseFragment(), HomeContract.View {
     override fun showErrorView(message: String) {
     }
 
+    override fun showMore(listResponse: MainPageListResponse) {
+        finishLoadView()
+        if(listResponse.datas.size == 0){
+            return
+        }
+        dataSource.addAll(listResponse.datas)
+        adapter.notifyDataSetChanged()
+        swipe_refresh_layout.setEnableAutoLoadMore(listResponse.total <= dataSource.size)
+    }
+
+    override fun showToast(message: String) {
+    }
+
+    fun finishLoadView(){
+        swipe_refresh_layout.finishLoadMore()
+        swipe_refresh_layout.finishRefresh()
+    }
 }

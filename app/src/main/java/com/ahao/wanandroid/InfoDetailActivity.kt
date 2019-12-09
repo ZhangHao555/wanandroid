@@ -2,7 +2,6 @@ package com.ahao.wanandroid
 
 import android.content.Context
 import android.content.Intent
-import android.net.http.SslError
 import android.os.Bundle
 import android.text.TextUtils
 import android.webkit.*
