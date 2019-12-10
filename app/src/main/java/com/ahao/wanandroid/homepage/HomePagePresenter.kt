@@ -9,30 +9,26 @@ import kotlinx.coroutines.launch
 class HomePagePresenter(val view: HomeContract.View) : HomeContract.Presenter {
     private var pageIndex = 0
 
-    init {
-        view.presenter = this
-    }
-
-    override fun loadHomeListData() {
+    override fun loadListData() {
         GlobalScope.launch(Dispatchers.Main) {
-            val result = ServiceManager.getService(WanAndroidHttpService::class.java)?.getMainPageList(pageIndex)
+            val result = ServiceManager.getService(WanAndroidHttpService::class.java)?.getHomePageList(pageIndex)
             result!!
             if (!result.isOK()) {
                 view.showErrorView(result.errorMsg)
             } else {
-                view.showData(result.data)
+                view.showData(result.data.datas,result.data.total)
             }
         }
     }
 
-    override fun loadMoreHomeListData() {
+    override fun loadMoreListData() {
         GlobalScope.launch(Dispatchers.Main) {
-            val result = ServiceManager.getService(WanAndroidHttpService::class.java)?.getMainPageList(++pageIndex)
+            val result = ServiceManager.getService(WanAndroidHttpService::class.java)?.getHomePageList(++pageIndex)
             result!!
             if (!result.isOK()) {
                 view.showToast(result.errorMsg)
             } else {
-                view.showMore(result.data)
+                view.showMore(result.data.datas,result.data.total)
             }
         }
     }

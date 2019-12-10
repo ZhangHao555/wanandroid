@@ -6,7 +6,7 @@ import android.text.TextUtils
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.ahao.wanandroid.R
-import com.ahao.wanandroid.bean.response.MainPageListResponse
+import com.ahao.wanandroid.bean.response.HomePageListResponse
 import com.ahao.wanandroid.util.dp2px
 import com.ahao.wanandroid.view.TagView
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -14,12 +14,12 @@ import com.chad.library.adapter.base.BaseViewHolder
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HomePageAdapter(data: List<MainPageListResponse.Item>, layout: Int)
-    : BaseQuickAdapter<MainPageListResponse.Item, BaseViewHolder>(layout, data) {
+class HomePageAdapter(data: List<HomePageListResponse.Item>, layout: Int)
+    : BaseQuickAdapter<HomePageListResponse.Item, BaseViewHolder>(layout, data) {
 
     private val oneDay = 1000 * 60 * 60 * 24
     private val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    override fun convert(helper: BaseViewHolder, item: MainPageListResponse.Item) {
+    override fun convert(helper: BaseViewHolder, item: HomePageListResponse.Item) {
         helper.setText(R.id.title, item.title)
         helper.setGone(R.id.author, !TextUtils.isEmpty(item.author))
                 .setText(R.id.author, "作者 ：" + item.author)

@@ -3,7 +3,7 @@ package com.ahao.wanandroid.dao
 import com.ahao.wanandroid.API
 import com.ahao.wanandroid.BaseUrl
 import com.ahao.wanandroid.bean.response.JsonResult
-import com.ahao.wanandroid.bean.response.MainPageListResponse
+import com.ahao.wanandroid.bean.response.HomePageListResponse
 import com.ahao.wanandroid.bean.response.UserInfo
 import com.google.gson.JsonElement
 import io.reactivex.Observable
@@ -25,5 +25,5 @@ interface WanAndroidHttpDao {
                  @Field("repassword") repassword: String?): Observable<JsonResult<JsonElement>>
 
     @GET(API.MAIN_PAGE_LIST)
-    fun getMainPageList(@Path("page") page:Int): Call<JsonResult<MainPageListResponse>>
+    fun getMainPageList(@Path("page") page:Int): Call<JsonResult<HomePageListResponse>>
 }
