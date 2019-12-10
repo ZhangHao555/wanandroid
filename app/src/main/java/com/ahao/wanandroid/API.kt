@@ -8,4 +8,6 @@ object API {
     const val OFFICIAL_ACCOUNT_TAB = "wxarticle/chapters/json"
     const val BANNER = "banner/json"
     const val MAIN_PAGE_LIST = "article/list/{page}/json"
+    const val PROJECT_CATEGORY = "project/tree/json"
+    const val PROJECT_LIST = "project/list/{page}/json"
 }

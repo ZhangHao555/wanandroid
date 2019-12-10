@@ -4,6 +4,7 @@ import com.ahao.wanandroid.bean.request.LoginRequest
 import com.ahao.wanandroid.bean.request.RegisterRequest
 import com.ahao.wanandroid.bean.response.JsonResult
 import com.ahao.wanandroid.bean.response.HomePageListResponse
+import com.ahao.wanandroid.bean.response.ProjectCategoryItem
 import com.ahao.wanandroid.bean.response.UserInfo
 import com.ahao.wanandroid.dao.WanAndroidHttpDao
 import com.google.gson.JsonElement
@@ -23,6 +24,14 @@ class WanAndroidHttpService {
 
     suspend fun getHomePageList(pageIndex: Int) :JsonResult<HomePageListResponse>? = withContext(Dispatchers.IO) {
         getDao(WanAndroidHttpDao::class.java).getMainPageList(pageIndex).execute().body()
+    }
+
+    suspend fun getProjectCategory():JsonResult<List<ProjectCategoryItem>>? = withContext(Dispatchers.IO){
+        getDao(WanAndroidHttpDao::class.java).getProjectCategory().execute().body()
+    }
+
+    suspend fun getProjectList(pageIndex: Int,categoryId : Int):JsonResult<HomePageListResponse>? = withContext(Dispatchers.IO){
+        getDao(WanAndroidHttpDao::class.java).getProjectList(pageIndex,categoryId).execute().body()
     }
 
     private fun <T> getDao(clazz: Class<T>): T {
