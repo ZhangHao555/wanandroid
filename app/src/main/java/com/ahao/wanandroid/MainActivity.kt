@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var fragments: List<Fragment> = listOf(HomePageFragment(), ProjectPageFragment(), QuestionAndAnswerFragment(), MineFragment())
+    private var fragments: List<Fragment> = listOf(MineFragment(),HomePageFragment(), ProjectPageFragment(), QuestionAndAnswerFragment(), MineFragment())
     private var currentFragment: Fragment? = null
 
     private val icons = arrayOf(arrayOf(R.mipmap.home_page_selected,

@@ -3,8 +3,10 @@ package com.ahao.wanandroid.projeect
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.ahao.wanandroid.R
 import com.ahao.wanandroid.baseview.BaseFragment
@@ -35,6 +37,7 @@ class ProjectPageFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.e(TAG, "ProjectPageFragment onViewCreated")
         initData()
         initEvent()
         initDataSource()
@@ -68,7 +71,7 @@ class ProjectPageFragment : BaseFragment() {
         indicator.navigator = navigator
         ViewPagerHelper.bind(indicator,view_pager)
 
-        viewPagerAdapter = ProjectPageAdapter(fragmentManager!!)
+        viewPagerAdapter = ProjectPageAdapter(childFragmentManager!!)
         view_pager.adapter = viewPagerAdapter
     }
 
@@ -91,9 +94,16 @@ class ProjectPageFragment : BaseFragment() {
 
 
     inner class ProjectPageAdapter(fragmentManager: FragmentManager)
-        : FragmentStatePagerAdapter(fragmentManager,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT){
+        : FragmentPagerAdapter(fragmentManager){
         override fun getItem(position: Int) = ProjectItemFragment.newInstance(tabDataSource[position].id)
 
         override fun getCount()= tabDataSource.size
     }
+
+    val TAG = "ProjectPageFragment"
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.e(TAG, "ProjectPageFragment onDestroyView")
+    }
+
 }
