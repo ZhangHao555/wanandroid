@@ -11,12 +11,14 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.ahao.wanandroid.homepage.HomePageFragment
 import com.ahao.wanandroid.mine.MineFragment
 import com.ahao.wanandroid.projeect.ProjectPageFragment
-import com.ahao.wanandroid.quetionandanswer.QuestionAndAnswerFragment
+import com.ahao.wanandroid.quetionandanswer.SeriesTopicFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import com.ahao.wanandroid.util.hideStatusArea
+
 
 class MainActivity : AppCompatActivity() {
 
-    private var fragments: List<Fragment> = listOf(MineFragment(),HomePageFragment(), ProjectPageFragment(), QuestionAndAnswerFragment(), MineFragment())
+    private var fragments: List<Fragment> = listOf(HomePageFragment(), ProjectPageFragment(), SeriesTopicFragment(), MineFragment())
     private var currentFragment: Fragment? = null
 
     private val icons = arrayOf(arrayOf(R.mipmap.home_page_selected,
@@ -35,7 +37,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         initData()
         initEvent()
-
     }
 
     private fun initData() {

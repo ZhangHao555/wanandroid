@@ -10,4 +10,5 @@ object API {
     const val MAIN_PAGE_LIST = "article/list/{page}/json"
     const val PROJECT_CATEGORY = "project/tree/json"
     const val PROJECT_LIST = "project/list/{page}/json"
+    const val SERIES_TOPIC_CATEGORY = "tree/json"
 }

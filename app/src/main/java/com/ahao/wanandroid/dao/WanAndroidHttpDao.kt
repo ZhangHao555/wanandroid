@@ -4,7 +4,7 @@ import com.ahao.wanandroid.API
 import com.ahao.wanandroid.BaseUrl
 import com.ahao.wanandroid.bean.response.JsonResult
 import com.ahao.wanandroid.bean.response.HomePageListResponse
-import com.ahao.wanandroid.bean.response.ProjectCategoryItem
+import com.ahao.wanandroid.bean.response.CategoryItem
 import com.ahao.wanandroid.bean.response.UserInfo
 import com.google.gson.JsonElement
 import io.reactivex.Observable
@@ -29,8 +29,11 @@ interface WanAndroidHttpDao {
     fun getMainPageList(@Path("page") page:Int): Call<JsonResult<HomePageListResponse>>
 
     @GET(API.PROJECT_CATEGORY)
-    fun getProjectCategory(): Call<JsonResult<List<ProjectCategoryItem>>>
+    fun getProjectCategory(): Call<JsonResult<List<CategoryItem>>>
 
     @GET(API.PROJECT_LIST)
     fun getProjectList(@Path("page") page:Int,@Query("cid") category : Int): Call<JsonResult<HomePageListResponse>>
+
+    @GET(API.SERIES_TOPIC_CATEGORY)
+    fun getSeriesTopicCategory(): Call<JsonResult<List<CategoryItem>>>
 }

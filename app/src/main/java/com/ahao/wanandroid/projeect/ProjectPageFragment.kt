@@ -7,10 +7,9 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.fragment.app.FragmentStatePagerAdapter
 import com.ahao.wanandroid.R
 import com.ahao.wanandroid.baseview.BaseFragment
-import com.ahao.wanandroid.bean.response.ProjectCategoryItem
+import com.ahao.wanandroid.bean.response.CategoryItem
 import com.ahao.wanandroid.service.ServiceManager
 import com.ahao.wanandroid.service.WanAndroidHttpService
 import kotlinx.android.synthetic.main.fragment_project_page.*
@@ -27,7 +26,7 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 
 
 class ProjectPageFragment : BaseFragment() {
-    val tabDataSource = mutableListOf<ProjectCategoryItem>()
+    val tabDataSource = mutableListOf<CategoryItem>()
     var indicatorAdapter : CommonNavigatorAdapter? = null
     var viewPagerAdapter : ProjectPageAdapter ? = null
 

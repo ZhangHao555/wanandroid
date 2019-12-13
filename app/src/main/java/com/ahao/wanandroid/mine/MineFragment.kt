@@ -14,13 +14,7 @@ class MineFragment : BaseFragment() {
     }
 
     private fun initData() {
-        start_stop.setOnClickListener {
-            if(!loading_view.animatorStop){
-                loading_view.stopAnimation()
-            }else{
-                loading_view.startAnimation()
-            }
-        }
+
     }
 
     override fun getLayoutRes(): Int {

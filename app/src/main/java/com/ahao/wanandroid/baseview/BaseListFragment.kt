@@ -5,6 +5,8 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.ahao.wanandroid.R
 import com.ahao.wanandroid.util.ToastUtil
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.BaseViewHolder
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import kotlinx.android.synthetic.main.fragment_home_page.*
 
@@ -14,7 +16,7 @@ abstract class BaseListFragment<T> : BaseFragment(), ListViewInterface<T> {
     protected lateinit var recyclerView: RecyclerView
     protected lateinit var refreshLayout: SmartRefreshLayout
     protected lateinit var presenter: ListViewPresenter
-    protected lateinit var adapter: RecyclerView.Adapter<*>
+    protected lateinit var adapter: BaseQuickAdapter<*,BaseViewHolder>
     protected lateinit var layoutManager: RecyclerView.LayoutManager
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -27,7 +29,7 @@ abstract class BaseListFragment<T> : BaseFragment(), ListViewInterface<T> {
     }
 
     protected abstract fun initPresenter(): ListViewPresenter
-    protected abstract fun initAdapter(): RecyclerView.Adapter<*>
+    protected abstract fun initAdapter(): BaseQuickAdapter<*,BaseViewHolder>
     protected abstract fun initLayoutManager(): RecyclerView.LayoutManager
 
     private fun initDataSource() {

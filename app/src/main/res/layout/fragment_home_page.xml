@@ -4,36 +4,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.ahao.bannerview.BannerView
-        android:id="@+id/banner_view"
-        android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.ahao.bannerview.BannerIndicator
-        android:id="@+id/banner_indicator"
-        android:layout_width="25dp"
-        android:layout_height="10dp"
-        android:layout_marginBottom="5dp"
-        app:layout_constraintBottom_toBottomOf="@id/banner_view"
-        app:layout_constraintEnd_toEndOf="@id/banner_view"
-        app:layout_constraintStart_toStartOf="@id/banner_view" />
-
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/swipe_refresh_layout"
-        android:layout_height="0dp"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/banner_view">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            app:elevation="0dp"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                app:layout_scrollFlags="scroll|enterAlways">
+
+                <com.ahao.bannerview.BannerView
+                    android:id="@+id/banner_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.ahao.bannerview.BannerIndicator
+                    android:id="@+id/banner_indicator"
+                    android:layout_width="25dp"
+                    android:layout_height="10dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="5dp" />
+            </RelativeLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="10dp" />
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

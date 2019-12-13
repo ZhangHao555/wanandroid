@@ -42,7 +42,7 @@
             android:drawableTop="@mipmap/interview_guide_unselected"
             android:gravity="center"
             android:padding="8dp"
-            android:text="面试指南"
+            android:text="项目"
             android:textSize="10sp"
             tools:ignore="SmallSp" />
 
@@ -54,7 +54,7 @@
             android:drawableTop="@mipmap/ask_every_day_unselected"
             android:gravity="center"
             android:padding="8dp"
-            android:text="每日一问"
+            android:text="体系"
             android:textSize="10sp"
             tools:ignore="SmallSp" />
 
