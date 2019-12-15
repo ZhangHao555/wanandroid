@@ -38,6 +38,10 @@ class WanAndroidHttpService {
         getDao(WanAndroidHttpDao::class.java).getSeriesTopicCategory().execute().body()
     }
 
+    suspend fun getSeriesTopocList(pageIndex: Int,categoryId : Int):JsonResult<HomePageListResponse>? = withContext(Dispatchers.IO){
+        getDao(WanAndroidHttpDao::class.java).getSeriesTopicList(pageIndex,categoryId).execute().body()
+    }
+
 
     private fun <T> getDao(clazz: Class<T>): T {
         return HttpManager.getDao(clazz)

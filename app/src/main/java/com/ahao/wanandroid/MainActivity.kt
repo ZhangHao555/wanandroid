@@ -11,9 +11,8 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.ahao.wanandroid.homepage.HomePageFragment
 import com.ahao.wanandroid.mine.MineFragment
 import com.ahao.wanandroid.projeect.ProjectPageFragment
-import com.ahao.wanandroid.quetionandanswer.SeriesTopicFragment
+import com.ahao.wanandroid.seriestopic.SeriesTopicFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import com.ahao.wanandroid.util.hideStatusArea
 
 
 class MainActivity : AppCompatActivity() {

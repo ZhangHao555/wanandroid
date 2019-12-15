@@ -1,4 +1,4 @@
-package com.ahao.wanandroid.quetionandanswer
+package com.ahao.wanandroid.seriestopic
 
 import android.graphics.Rect
 import android.view.View

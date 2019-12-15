@@ -36,4 +36,7 @@ interface WanAndroidHttpDao {
 
     @GET(API.SERIES_TOPIC_CATEGORY)
     fun getSeriesTopicCategory(): Call<JsonResult<List<CategoryItem>>>
+
+    @GET(API.SERIES_TOPIC_LIST)
+    fun getSeriesTopicList(@Path("page") page:Int,@Query("cid") category : Int): Call<JsonResult<HomePageListResponse>>
 }

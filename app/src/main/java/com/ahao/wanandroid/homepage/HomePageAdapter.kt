@@ -22,15 +22,15 @@ class HomePageAdapter(data: List<HomePageListResponse.Item>, layout: Int)
     override fun convert(helper: BaseViewHolder, item: HomePageListResponse.Item) {
         helper.setText(R.id.title, item.title)
         helper.setGone(R.id.author, !TextUtils.isEmpty(item.author))
-                .setText(R.id.author, "作者 ：" + item.author)
+                .setText(R.id.author,  item.author)
         helper.setGone(R.id.type, !TextUtils.isEmpty(item.chapterName))
-                .setText(R.id.type, "分类 ：" + item.chapterName)
+                .setText(R.id.type, item.chapterName)
 
         if (System.currentTimeMillis() - item.publishTime > oneDay * 3) {
-            helper.setText(R.id.time, "时间 : " + format.format(item.publishTime))
+            helper.setText(R.id.time, format.format(item.publishTime))
         } else {
             val timeGap = (System.currentTimeMillis() - item.publishTime ) / oneDay
-            helper.setText(R.id.time, "时间 : $timeGap 天前")
+            helper.setText(R.id.time, "$timeGap 天前")
         }
 
         if (item.tags.isEmpty()) {

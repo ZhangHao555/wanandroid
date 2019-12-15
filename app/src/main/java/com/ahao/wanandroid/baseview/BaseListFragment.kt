@@ -32,7 +32,7 @@ abstract class BaseListFragment<T> : BaseFragment(), ListViewInterface<T> {
     protected abstract fun initAdapter(): BaseQuickAdapter<*,BaseViewHolder>
     protected abstract fun initLayoutManager(): RecyclerView.LayoutManager
 
-    private fun initDataSource() {
+    open fun initDataSource() {
         presenter.loadListData()
     }
 

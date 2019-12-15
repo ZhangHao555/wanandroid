@@ -65,7 +65,7 @@ class HomePageFragment : BaseListFragment<HomePageListResponse.Item>(), HomeCont
         recycler_view.apply {
             layoutManager = LinearLayoutManager(context)
             this.adapter = this@HomePageFragment.adapter
-            addItemDecoration(HomeItemDeractor())
+            addItemDecoration(HomeItemDecoration())
         }
     }
 
