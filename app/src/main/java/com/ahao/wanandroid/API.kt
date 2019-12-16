@@ -12,4 +12,7 @@ object API {
     const val PROJECT_LIST = "project/list/{page}/json"
     const val SERIES_TOPIC_CATEGORY = "tree/json"
     const val SERIES_TOPIC_LIST = "article/list/{page}/json"
+    const val COLLECT = "lg/collect/{id}/json"
+    const val CANCEL_COLLECT = "lg/uncollect_originId/{id}/json"
+    const val COLLECTION_LIST = "lg/collect/list/{page}/json"
 }

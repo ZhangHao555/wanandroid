@@ -34,10 +34,7 @@ class TagView(context: Context, attrs: AttributeSet?) : TextView(context, attrs)
         rect = RectF()
     }
 
-
     override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-
         paint.color = borderColor
         paint.style = drawStyle
 
@@ -56,5 +53,6 @@ class TagView(context: Context, attrs: AttributeSet?) : TextView(context, attrs)
             }
         }
         canvas.drawRoundRect(rect, radius, radius, paint)
+        super.onDraw(canvas)
     }
 }

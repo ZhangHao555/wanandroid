@@ -21,15 +21,14 @@ class HomePageAdapter(data: List<HomePageListResponse.Item>, layout: Int)
     private val format = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     override fun convert(helper: BaseViewHolder, item: HomePageListResponse.Item) {
         helper.setText(R.id.title, item.title)
-        helper.setGone(R.id.author, !TextUtils.isEmpty(item.author))
-                .setText(R.id.author,  item.author)
+                .setText(R.id.author, if (TextUtils.isEmpty(item.author)) "匿名" else item.author)
         helper.setGone(R.id.type, !TextUtils.isEmpty(item.chapterName))
                 .setText(R.id.type, item.chapterName)
 
         if (System.currentTimeMillis() - item.publishTime > oneDay * 3) {
             helper.setText(R.id.time, format.format(item.publishTime))
         } else {
-            val timeGap = (System.currentTimeMillis() - item.publishTime ) / oneDay
+            val timeGap = (System.currentTimeMillis() - item.publishTime) / oneDay
             helper.setText(R.id.time, "$timeGap 天前")
         }
 
@@ -49,13 +48,14 @@ class HomePageAdapter(data: List<HomePageListResponse.Item>, layout: Int)
                     setTextColor(Color.parseColor("#3D7113"))
                     text = it.name
                     val dp3: Int = dp2px(3f)
-                    setPadding(dp3,dp3,dp3,dp3)
+                    setPadding(dp3, dp3, dp3, dp3)
                     textSize = 10f
-                    tagContainer.addView(this,ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT)
+                    tagContainer.addView(this, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 }
             }
         }
-        helper.setImageResource(R.id.like,if(item.collect) R.mipmap.like else R.mipmap.not_like )
+        helper.setImageResource(R.id.like, if (item.collect) R.mipmap.like else R.mipmap.not_like)
+                .addOnClickListener(R.id.like)
 
     }
 

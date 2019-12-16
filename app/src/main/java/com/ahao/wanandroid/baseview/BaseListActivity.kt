@@ -1,7 +1,7 @@
 package com.ahao.wanandroid.baseview
 
 import android.os.Bundle
-import android.view.View
+import android.os.PersistableBundle
 import androidx.recyclerview.widget.RecyclerView
 import com.ahao.wanandroid.R
 import com.ahao.wanandroid.util.ToastUtil
@@ -10,7 +10,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import kotlinx.android.synthetic.main.fragment_home_page.*
 
-abstract class BaseListFragment<T> : BaseFragment(), ListViewInterface<T> {
+abstract class BaseListActivity<T> : BaseActivity(), ListViewInterface<T> {
 
     protected val dataSource = mutableListOf<T>()
     protected lateinit var recyclerView: RecyclerView
@@ -19,21 +19,16 @@ abstract class BaseListFragment<T> : BaseFragment(), ListViewInterface<T> {
     protected lateinit var adapter: BaseQuickAdapter<*, BaseViewHolder>
     protected lateinit var layoutManager: RecyclerView.LayoutManager
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        recyclerView = view.findViewById(R.id.recycler_view)
-        refreshLayout = view.findViewById(R.id.swipe_refresh_layout)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(getLayoutId())
+        recyclerView = findViewById(R.id.recycler_view)
+        refreshLayout = findViewById(R.id.swipe_refresh_layout)
+
         initData()
         initEvent()
         initDataSource()
-    }
-
-    protected abstract fun initPresenter(): ListViewPresenter
-    protected abstract fun initAdapter(): BaseQuickAdapter<*, BaseViewHolder>
-    protected abstract fun initLayoutManager(): RecyclerView.LayoutManager
-
-    open fun initDataSource() {
-        presenter.loadListData()
     }
 
     private fun initData() {
@@ -42,10 +37,9 @@ abstract class BaseListFragment<T> : BaseFragment(), ListViewInterface<T> {
         presenter = initPresenter()
 
         recyclerView.apply {
-            layoutManager = this@BaseListFragment.layoutManager
-            adapter = this@BaseListFragment.adapter
+            layoutManager = this@BaseListActivity.layoutManager
+            adapter = this@BaseListActivity.adapter
         }
-
     }
 
     private fun initEvent() {
@@ -56,31 +50,31 @@ abstract class BaseListFragment<T> : BaseFragment(), ListViewInterface<T> {
         refreshLayout.setOnLoadMoreListener {
             presenter.loadMoreListData()
         }
+
+    }
+
+    open fun initDataSource() {
+        presenter.loadListData()
     }
 
     override fun showData(listData: List<T>, total: Int) {
-        if (isViewDestroyed) {
-            return
-        }
         if (listData.isNotEmpty()) {
             dataSource.clear()
             dataSource.addAll(listData)
             adapter.notifyDataSetChanged()
         }
-        swipe_refresh_layout.setEnableAutoLoadMore(total <= dataSource.size)
+        refreshLayout.setEnableAutoLoadMore(total > dataSource.size)
+        swipe_refresh_layout.setEnableLoadMore(total > dataSource.size)
         finishLoadView()
     }
 
     override fun showMore(listData: List<T>, total: Int) {
-        if (isViewDestroyed) {
-            return
-        }
-
         if (listData.isNotEmpty()) {
             dataSource.addAll(listData)
             adapter.notifyDataSetChanged()
         }
-        swipe_refresh_layout.setEnableAutoLoadMore(total <= dataSource.size)
+        swipe_refresh_layout.setEnableAutoLoadMore(total > dataSource.size)
+        swipe_refresh_layout.setEnableLoadMore(total > dataSource.size)
         finishLoadView()
     }
 
@@ -97,4 +91,8 @@ abstract class BaseListFragment<T> : BaseFragment(), ListViewInterface<T> {
         swipe_refresh_layout.finishRefresh()
     }
 
+    abstract fun getLayoutId(): Int
+    protected abstract fun initPresenter(): ListViewPresenter
+    protected abstract fun initAdapter(): BaseQuickAdapter<*, BaseViewHolder>
+    protected abstract fun initLayoutManager(): RecyclerView.LayoutManager
 }

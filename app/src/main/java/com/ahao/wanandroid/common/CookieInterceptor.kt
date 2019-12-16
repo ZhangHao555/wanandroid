@@ -14,14 +14,7 @@ class CookieInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
         request = request.newBuilder().apply {
-            jsessionId?.let { addHeader(HttpConstant.JSESSIONID, it) }
-
-            if (loginUserName.isNotBlank()) {
-                addHeader(HttpConstant.LOGIN_USER_NAME, loginUserName)
-            }
-            if (token.isNotBlank()) {
-                addHeader(HttpConstant.TOKEN_PASS, token)
-            }
+            addHeader(HttpConstant.COOKIE, combineCookie())
         }.build()
 
 
@@ -43,5 +36,22 @@ class CookieInterceptor : Interceptor {
             }
         }
         return response
+    }
+
+    private fun combineCookie(): String {
+        var text = ""
+        if (jsessionId != null) {
+            text += HttpConstant.JSESSIONID + "=$jsessionId;"
+        }
+
+        if (token.isNotEmpty()) {
+            text += HttpConstant.TOKEN_PASS + "=$token;"
+        }
+
+        if (loginUserName.isNotEmpty()) {
+            text += HttpConstant.LOGIN_USER_NAME + "=$loginUserName;"
+        }
+
+        return text
     }
 }

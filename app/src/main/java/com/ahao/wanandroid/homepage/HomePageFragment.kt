@@ -17,6 +17,7 @@ import com.ahao.bannerview.ScaleBannerLayoutManager
 import com.ahao.wanandroid.InfoDetailActivity
 import com.ahao.wanandroid.R
 import com.ahao.wanandroid.baseview.BaseListFragment
+import com.ahao.wanandroid.baseview.ListViewPresenter
 import com.ahao.wanandroid.bean.response.HomePageListResponse
 import com.ahao.wanandroid.util.ToastUtil
 import com.ahao.wanandroid.util.dp2px
@@ -26,7 +27,13 @@ import kotlinx.android.synthetic.main.fragment_home_page.*
 
 class HomePageFragment : BaseListFragment<HomePageListResponse.Item>(), HomeContract.View {
 
-    override fun initPresenter()= HomePagePresenter(this)
+    private lateinit var mPresenter: HomePagePresenter
+
+    override fun initPresenter(): ListViewPresenter {
+        mPresenter = HomePagePresenter(this)
+        return mPresenter
+    }
+
     override fun initAdapter() = HomePageAdapter(dataSource, R.layout.view_home_list_item)
     override fun initLayoutManager() = LinearLayoutManager(activity)
 
@@ -69,7 +76,7 @@ class HomePageFragment : BaseListFragment<HomePageListResponse.Item>(), HomeCont
         }
     }
 
-    private fun initEvent(){
+    private fun initEvent() {
         adapter.setOnItemClickListener { _, _, position ->
             if (TextUtils.isEmpty(dataSource[position].link)) {
                 ToastUtil.toast("数据错误...")
@@ -78,6 +85,25 @@ class HomePageFragment : BaseListFragment<HomePageListResponse.Item>(), HomeCont
                 startActivity(intent)
             }
         }
+
+        adapter.setOnItemChildClickListener { adapter, view, position ->
+            when (view.id) {
+                R.id.like -> {
+                    if (dataSource[position].collect) {
+                        mPresenter.cancelCollect(dataSource[position].id)
+                        dataSource[position].collect = false
+                    } else {
+                        mPresenter.collect(dataSource[position].id)
+                        dataSource[position].collect = true
+                    }
+                    adapter.notifyItemChanged(position)
+                }
+            }
+        }
+    }
+
+    override fun notifyDataSetChanged() {
+        adapter.notifyDataSetChanged()
     }
 
     override fun getLayoutRes(): Int {

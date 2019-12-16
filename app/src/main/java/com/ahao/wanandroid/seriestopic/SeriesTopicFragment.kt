@@ -1,30 +1,40 @@
 package com.ahao.wanandroid.seriestopic
 
+import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.FragmentStatePagerAdapter
 import com.ahao.wanandroid.R
 import com.ahao.wanandroid.baseview.BaseFragment
 import com.ahao.wanandroid.bean.response.CategoryItem
 import com.ahao.wanandroid.service.ServiceManager
 import com.ahao.wanandroid.service.WanAndroidHttpService
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
-import kotlinx.android.synthetic.main.fragment_project_page.*
-import kotlinx.android.synthetic.main.fragment_series_topic_item.*
+import kotlinx.android.synthetic.main.fragment_project_page.view_pager
+import kotlinx.android.synthetic.main.fragment_series_topic.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import net.lucode.hackware.magicindicator.ViewPagerHelper
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerIndicator
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.IPagerTitleView
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.indicators.LinePagerIndicator
+import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorTransitionPagerTitleView
 
 class SeriesTopicFragment : BaseFragment() {
 
     private val categoryDataList: MutableList<CategoryItem> = mutableListOf()
-    private val categoryAdapter = CategoryAdapter(R.layout.view_series_topic_category_item, categoryDataList)
     private lateinit var viewPagerAdapter: SeriesItemAdapter
+    private lateinit var indicatorAdapter: CommonNavigatorAdapter
+
+    override fun getLayoutRes() = R.layout.fragment_series_topic
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initData()
@@ -33,23 +43,39 @@ class SeriesTopicFragment : BaseFragment() {
     }
 
     private fun initData() {
-        category_list.apply {
-            layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-            adapter = categoryAdapter
-            addItemDecoration(ItemDecoration())
+        val navigator = CommonNavigator(activity)
+        indicatorAdapter = object : CommonNavigatorAdapter() {
+            override fun getTitleView(p0: Context?, index: Int): IPagerTitleView {
+                val colorTransitionPagerTitleView = ColorTransitionPagerTitleView(context)
+                colorTransitionPagerTitleView.normalColor = Color.GRAY
+                colorTransitionPagerTitleView.selectedColor = ContextCompat.getColor(context!!, R.color.deep_blue)
+                colorTransitionPagerTitleView.setText(categoryDataList[index].name)
+                colorTransitionPagerTitleView.setOnClickListener { view_pager.setCurrentItem(index) }
+
+                return colorTransitionPagerTitleView
+            }
+
+            override fun getCount() = categoryDataList.size
+            override fun getIndicator(p0: Context?): IPagerIndicator {
+                val indicator = LinePagerIndicator(context)
+                indicator.mode = LinePagerIndicator.MODE_WRAP_CONTENT
+                indicator.setColors(ContextCompat.getColor(context!!, R.color.shallow_blue))
+                return indicator
+            }
+
         }
-        category_list.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-        category_list.adapter = categoryAdapter
 
         viewPagerAdapter = SeriesItemAdapter(categoryDataList, childFragmentManager)
         view_pager.adapter = viewPagerAdapter
+
+        magic_indicator.navigator = navigator
+        navigator.adapter = indicatorAdapter
+        ViewPagerHelper.bind(magic_indicator, view_pager)
     }
 
 
     private fun initEvent() {
-        categoryAdapter.setOnItemClickListener { _, _, position ->
-            view_pager.setCurrentItem(position,true)
-        }
+
     }
 
     private fun initDataSource() {
@@ -70,7 +96,7 @@ class SeriesTopicFragment : BaseFragment() {
         if (data.isNotEmpty()) {
             categoryDataList.clear()
             categoryDataList.addAll(data)
-            categoryAdapter.notifyDataSetChanged()
+            indicatorAdapter.notifyDataSetChanged()
             viewPagerAdapter.notifyDataSetChanged()
         }
     }
@@ -79,18 +105,7 @@ class SeriesTopicFragment : BaseFragment() {
 
     }
 
-
-    class CategoryAdapter(resLayout: Int, data: MutableList<CategoryItem>) : BaseQuickAdapter<CategoryItem, BaseViewHolder>(resLayout, data) {
-
-        override fun convert(helper: BaseViewHolder, item: CategoryItem?) {
-            helper.setText(R.id.tag_text, item?.name)
-        }
-
-    }
-
-    override fun getLayoutRes() = R.layout.fragment_series_topic
-
-    class SeriesItemAdapter(val categoryDataList: MutableList<CategoryItem>, fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
+    class SeriesItemAdapter(val categoryDataList: MutableList<CategoryItem>, fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
         override fun getItem(position: Int): Fragment {
             return SeriesTopicFragmentItem.newInstance(categoryDataList[position].children)
         }

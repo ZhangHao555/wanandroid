@@ -1,15 +1,21 @@
 package com.ahao.wanandroid.seriestopic
 
+import android.graphics.Color
+import android.graphics.Paint
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ahao.wanandroid.InfoDetailActivity
 import com.ahao.wanandroid.R
 import com.ahao.wanandroid.baseview.BaseListFragment
 import com.ahao.wanandroid.bean.response.CategoryItem
 import com.ahao.wanandroid.bean.response.HomePageListResponse
 import com.ahao.wanandroid.homepage.HomeItemDecoration
 import com.ahao.wanandroid.homepage.HomePageAdapter
+import com.ahao.wanandroid.util.ToastUtil
+import com.ahao.wanandroid.view.TagView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import kotlinx.android.synthetic.main.fragment_series_topic_item.*
@@ -26,6 +32,8 @@ class SeriesTopicFragmentItem : BaseListFragment<HomePageListResponse.Item>() {
 
     private val categoryDataList: MutableList<CategoryItem> = mutableListOf()
     private val categoryAdapter = CategoryAdapter(R.layout.view_series_topic_category_item, categoryDataList)
+
+    private var selected = 0
 
     companion object {
         const val DATA_LIST = "dataList"
@@ -58,9 +66,20 @@ class SeriesTopicFragmentItem : BaseListFragment<HomePageListResponse.Item>() {
     }
 
     private fun initEvent() {
-        categoryAdapter.setOnItemClickListener { adapter, view, position ->
+        categoryAdapter.setOnItemClickListener { _, _, position ->
             (presenter as SeriesTopicItemPresenter).category = categoryDataList[position].id
             presenter.loadListData()
+            selected = position
+            categoryAdapter.notifyDataSetChanged()
+        }
+
+        adapter.setOnItemClickListener { _, _, position ->
+            if (TextUtils.isEmpty(dataSource[position].link)) {
+                ToastUtil.toast("数据错误...")
+            } else {
+                val intent = InfoDetailActivity.newIntent(activity, dataSource[position].link)
+                startActivity(intent)
+            }
         }
     }
 
@@ -71,13 +90,21 @@ class SeriesTopicFragmentItem : BaseListFragment<HomePageListResponse.Item>() {
 
     }
 
-    class CategoryAdapter(resLayout: Int, data: MutableList<CategoryItem>) : BaseQuickAdapter<CategoryItem, BaseViewHolder>(resLayout, data) {
+    inner class CategoryAdapter(resLayout: Int, data: MutableList<CategoryItem>) : BaseQuickAdapter<CategoryItem, BaseViewHolder>(resLayout, data) {
 
         override fun convert(helper: BaseViewHolder, item: CategoryItem?) {
-            helper.setText(R.id.tag_text, item?.name)
+            val tag: TagView = helper.getView(R.id.tag_text)
+            tag.text = (item?.name)
+            tag.drawStyle = Paint.Style.FILL
+            if (selected == helper.adapterPosition) {
+                tag.borderColor = Color.parseColor("#2D7BB6")
+                tag.setTextColor(Color.WHITE)
+            } else {
+                tag.borderColor = Color.WHITE
+                tag.setTextColor(Color.GRAY)
+            }
         }
 
     }
-
 
 }

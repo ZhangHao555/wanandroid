@@ -14,7 +14,7 @@ class SeriesTopicItemPresenter(val view : ListViewInterface<HomePageListResponse
 
     override fun loadListData() {
         GlobalScope.launch(Dispatchers.Main) {
-            val result  = ServiceManager.getService(WanAndroidHttpService::class.java)?.getSeriesTopocList(pageIndex,category)
+            val result  = ServiceManager.getService(WanAndroidHttpService::class.java)?.getSeriesTopicList(pageIndex,category)
             if(result == null){
                 view.showErrorView("error")
             }else{
@@ -29,7 +29,7 @@ class SeriesTopicItemPresenter(val view : ListViewInterface<HomePageListResponse
 
     override fun loadMoreListData() {
         GlobalScope.launch(Dispatchers.Main) {
-            val result  = ServiceManager.getService(WanAndroidHttpService::class.java)?.getSeriesTopocList(pageIndex++,category)
+            val result  = ServiceManager.getService(WanAndroidHttpService::class.java)?.getSeriesTopicList(pageIndex++,category)
             if(result == null){
                 view.showErrorView("error")
             }else{

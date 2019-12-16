@@ -8,7 +8,9 @@ import com.ahao.wanandroid.bean.response.HomePageListResponse
 
 interface HomeContract {
 
-    interface View : BaseView , ListViewInterface<HomePageListResponse.Item>
+    interface View : BaseView , ListViewInterface<HomePageListResponse.Item>{
+        fun notifyDataSetChanged()
+    }
 
     interface Presenter : BasePresenter ,ListViewPresenter
 }

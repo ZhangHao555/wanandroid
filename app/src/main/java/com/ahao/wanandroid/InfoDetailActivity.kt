@@ -19,8 +19,6 @@ class InfoDetailActivity : BaseActivity() {
     private fun initData() {
         val url = intent.getStringExtra(URL_PARAM)
         if (!TextUtils.isEmpty(url)) {
-
-
             web_view.apply {
                 loadUrl(url)
                 webChromeClient = object : WebChromeClient() {
@@ -29,13 +27,11 @@ class InfoDetailActivity : BaseActivity() {
                             ToastUtil.toast(title!!)
                         }
                     }
-
-
                 }
+                settings.javaScriptEnabled = true
             }
-
-            web_view.settings.javaScriptEnabled = true
         }
+
     }
 
     companion object {
