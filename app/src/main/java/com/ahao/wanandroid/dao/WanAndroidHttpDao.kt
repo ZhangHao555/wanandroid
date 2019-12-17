@@ -44,5 +44,5 @@ interface WanAndroidHttpDao {
     fun cancelCollect(@Path("id") page: Int): Call<JsonResult<String>>
 
     @GET(API.COLLECTION_LIST)
-    fun getCollectionList(@Path("page") page: Int): Call<JsonResult<CollectionListResponse>>
+    fun getCollectionList(@Path("page") page: Int): Call<JsonResult<CollectionListResponse?>>
 }

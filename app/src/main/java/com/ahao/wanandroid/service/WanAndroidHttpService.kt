@@ -4,9 +4,12 @@ import com.ahao.wanandroid.bean.request.LoginRequest
 import com.ahao.wanandroid.bean.request.RegisterRequest
 import com.ahao.wanandroid.bean.response.*
 import com.ahao.wanandroid.dao.WanAndroidHttpDao
+import com.ahao.wanandroid.util.isNetWorkConnected
 import com.google.gson.JsonElement
 import io.reactivex.Observable
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
@@ -72,15 +75,57 @@ class WanAndroidHttpService {
         }
     }
 
-    suspend fun getCollectionList(pageIndex: Int): JsonResult<CollectionListResponse>? = withContext(Dispatchers.IO) {
-        try {
+    fun getCollectionList(pageIndex: Int): API<CollectionListResponse> {
+        return API<CollectionListResponse>().execute {
             getDao(WanAndroidHttpDao::class.java).getCollectionList(pageIndex).execute().body()
-        } catch (e: Exception) {
-            null
         }
     }
 
     private fun <T> getDao(clazz: Class<T>): T {
         return HttpManager.getDao(clazz)
+    }
+
+    class API<T> {
+        var onLoading: (() -> Unit)? = null
+        var onSuccess: ((result: JsonResult<T?>?) -> Unit)? = null
+        var onError: ((message: String, code: ErrorCode) -> Unit)? = null
+
+        fun execute(executor: suspend () -> JsonResult<T?>?): API<T> {
+            try {
+                GlobalScope.launch(Dispatchers.Main) {
+                    onLoading?.invoke()
+                    val result = executor.invoke()
+                    onSuccess?.invoke(result)
+                }
+            } catch (e: Exception) {
+                if (isNetWorkConnected()) {
+                    onError?.invoke("网络错误", ErrorCode.NET_ERROR)
+                } else {
+                    onError?.invoke(e.message ?: "", ErrorCode.EXCEPTION)
+                }
+            }
+            return this
+        }
+
+        fun onLoading(onLoading: (() -> Unit)): API<T> {
+            this.onLoading = onLoading
+            return this
+        }
+
+        fun onSuccess(onSuccess: (result: JsonResult<T?>?) -> Unit): API<T> {
+            this.onSuccess = onSuccess
+            return this
+        }
+
+        fun onError(onError: ((message: String, code: ErrorCode) -> Unit)): API<T> {
+            this.onError = onError
+            return this
+        }
+
+    }
+
+
+    enum class ErrorCode {
+        EXCEPTION, NET_ERROR
     }
 }

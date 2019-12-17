@@ -8,14 +8,16 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.ahao.wanandroid.baseview.BaseActivity
 import com.ahao.wanandroid.homepage.HomePageFragment
 import com.ahao.wanandroid.mine.MineFragment
 import com.ahao.wanandroid.projeect.ProjectPageFragment
 import com.ahao.wanandroid.seriestopic.SeriesTopicFragment
+import com.ahao.wanandroid.view.ProgressDialog
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private var fragments: List<Fragment> = listOf(HomePageFragment(), ProjectPageFragment(), SeriesTopicFragment(), MineFragment())
     private var currentFragment: Fragment? = null
@@ -75,16 +77,6 @@ class MainActivity : AppCompatActivity() {
                 val drawable = if (it == indexOf) getDrawable(icons[0][it]) else getDrawable(icons[1][it])
                 buttons[it].setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null)
             }
-        }
-    }
-
-    inner class Adapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-        override fun getItem(position: Int): Fragment {
-            return fragments[position]
-        }
-
-        override fun getCount(): Int {
-            return fragments.count()
         }
     }
 

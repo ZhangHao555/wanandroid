@@ -1,9 +1,12 @@
 package com.ahao.wanandroid.util
 
 import android.app.Activity
+import android.content.Context
+import android.net.ConnectivityManager
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import com.ahao.wanandroid.App
 
 fun Activity.hideStatusArea(){
     val decorView = window.decorView
@@ -17,3 +20,6 @@ fun Activity.setStatusBarColor(color:Int){
 }
 
 fun Activity.getColorInActivity(colorId:Int) = ContextCompat.getColor(this,colorId)
+
+fun isNetWorkConnected()= (App.context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo != null
+

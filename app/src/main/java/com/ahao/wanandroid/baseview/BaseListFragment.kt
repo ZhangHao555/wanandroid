@@ -5,6 +5,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.ahao.wanandroid.R
 import com.ahao.wanandroid.util.ToastUtil
+import com.ahao.wanandroid.view.ProgressDialog
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
@@ -18,6 +19,8 @@ abstract class BaseListFragment<T> : BaseFragment(), ListViewInterface<T> {
     protected lateinit var presenter: ListViewPresenter
     protected lateinit var adapter: BaseQuickAdapter<*, BaseViewHolder>
     protected lateinit var layoutManager: RecyclerView.LayoutManager
+    private var progressDialog: ProgressDialog? = null
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,6 +36,7 @@ abstract class BaseListFragment<T> : BaseFragment(), ListViewInterface<T> {
     protected abstract fun initLayoutManager(): RecyclerView.LayoutManager
 
     open fun initDataSource() {
+        showProgressDialog()
         presenter.loadListData()
     }
 
@@ -62,6 +66,7 @@ abstract class BaseListFragment<T> : BaseFragment(), ListViewInterface<T> {
         if (isViewDestroyed) {
             return
         }
+
         if (listData.isNotEmpty()) {
             dataSource.clear()
             dataSource.addAll(listData)
@@ -95,6 +100,18 @@ abstract class BaseListFragment<T> : BaseFragment(), ListViewInterface<T> {
     override fun finishLoadView() {
         swipe_refresh_layout.finishLoadMore()
         swipe_refresh_layout.finishRefresh()
+        hideProgressDialog()
+    }
+
+    fun showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = ProgressDialog(activity!!)
+        }
+        progressDialog?.show()
+    }
+
+    fun hideProgressDialog() {
+        progressDialog?.hide()
     }
 
 }

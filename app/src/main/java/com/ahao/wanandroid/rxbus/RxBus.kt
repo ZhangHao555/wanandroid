@@ -10,7 +10,7 @@ class RxBus {
         private val subject: PublishSubject<Any> = PublishSubject.create()
         fun post(data: Any) = subject.onNext(data)
 
-        fun toObservable(code: String): Observable<Message>? {
+        fun toObservable(code: String): Observable<Message> {
             return subject.ofType(Message::class.java)
                     .filter {
                         it.code == code

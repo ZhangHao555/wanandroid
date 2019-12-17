@@ -9,23 +9,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
+import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
 import static com.ahao.wanandroid.util.DensityUtilKt.dp2px;
 
-public class LoadingView extends SurfaceView implements SurfaceHolder.Callback, Runnable {
-    private SurfaceHolder holder;
+public class LoadingView extends View {
     private Paint p;
-    private Thread t;
-    private Canvas mCanvas;
-    public volatile boolean flag;
-
-    private int itemGap = dp2px(8);
-    private int itemRadius = dp2px(8);
+    private int itemGap = dp2px(4);
+    private int itemRadius = dp2px(4);
 
     private static final int NORMAL_DURATION = 300;
     private static final int END_DURATION = 250;
@@ -59,12 +52,8 @@ public class LoadingView extends SurfaceView implements SurfaceHolder.Callback, 
 
     public LoadingView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        holder = getHolder(); // 获得SurfaceHolder对象
-        holder.addCallback(this); // 为SurfaceView添加状态监听
-        setFocusable(true);
         p = new Paint();
-
-        init(context);
+        init();
     }
 
     @Override
@@ -81,7 +70,7 @@ public class LoadingView extends SurfaceView implements SurfaceHolder.Callback, 
         }
     }
 
-    private void init(Context context) {
+    private void init() {
         colors = new int[]{Color.parseColor("#FF62DFCB"), Color.parseColor("#FFACEBE3"), Color.parseColor("#FF00CEAA")};
 
         int stepLength = itemGap + itemRadius * 2;
@@ -135,81 +124,43 @@ public class LoadingView extends SurfaceView implements SurfaceHolder.Callback, 
         });
     }
 
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-        this.holder = holder;
-        t = new Thread(this);
-        flag = true;
-        t.start();
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        flag = false;
-        holder.removeCallback(this);
-    }
-
-    public static String TAG = "LoadingView";
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         leftX = centerX = rightX = (getMeasuredWidth() - itemRadius * 2) / 2;
-        Log.e(TAG, "onMeasure: ");
     }
+
 
     @Override
-    public void run() {
-        while (flag) {
-            try {
-                synchronized (holder) {
-                    Thread.sleep(30); // 让线程休息100毫秒
-                    myDraw(); // 调用自定义画画方法
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } finally {
-                if (mCanvas != null) {
-                    holder.unlockCanvasAndPost(mCanvas);
-                }
-            }
-        }
-    }
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
 
-    private void myDraw() {
-        mCanvas = holder.lockCanvas();
         p.setStyle(Paint.Style.FILL);
         p.setAntiAlias(true);
 
-        p.setColor(Color.WHITE);
-        mCanvas.drawRect(0, 0, getMeasuredWidth(), getMeasuredHeight(), p);
-
-        int top = getMeasuredHeight() / 2 - itemRadius;
+        int top = getMeasuredHeight() / 2;
         p.setColor(colors[0]);
-        mCanvas.drawCircle(leftX, top, itemRadius, p);
+        canvas.drawCircle(leftX, top, itemRadius, p);
         p.setColor(colors[1]);
-        mCanvas.drawCircle(centerX, top, itemRadius, p);
+        canvas.drawCircle(centerX, top, itemRadius, p);
         p.setColor(colors[2]);
-        mCanvas.drawCircle(rightX, top, itemRadius, p);
-
+        canvas.drawCircle(rightX, top, itemRadius, p);
     }
-
 
     public void setLeftX(int leftX) {
         this.leftX = leftX;
+        invalidate();
     }
 
     public void setCenterX(int centerX) {
         this.centerX = centerX;
+        invalidate();
     }
 
     public void setRightX(int rightX) {
         this.rightX = rightX;
+        invalidate();
     }
 
     public synchronized void startAnimation() {
