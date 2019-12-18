@@ -59,6 +59,18 @@
             tools:ignore="SmallSp" />
 
         <TextView
+            android:id="@+id/nav_button"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:drawableTop="@mipmap/ask_every_day_unselected"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="导航"
+            android:textSize="10sp"
+            tools:ignore="SmallSp" />
+
+        <TextView
             android:id="@+id/my_page"
             android:layout_width="0dp"
             android:layout_height="match_parent"

@@ -15,4 +15,5 @@ object API {
     const val COLLECT = "lg/collect/{id}/json"
     const val CANCEL_COLLECT = "lg/uncollect_originId/{id}/json"
     const val COLLECTION_LIST = "lg/collect/list/{page}/json"
+    const val NAV_LIST = "navi/json"
 }

@@ -19,15 +19,17 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
 
-    private var fragments: List<Fragment> = listOf(HomePageFragment(), ProjectPageFragment(), SeriesTopicFragment(), MineFragment())
+    private var fragments: List<Fragment> = listOf(HomePageFragment(), ProjectPageFragment(), SeriesTopicFragment(),NavFragment(), MineFragment())
     private var currentFragment: Fragment? = null
 
     private val icons = arrayOf(arrayOf(R.mipmap.home_page_selected,
             R.mipmap.interview_guide_selected,
             R.mipmap.ask_every_day_selected,
+            R.mipmap.ask_every_day_selected,
             R.mipmap.my_page_selected),
             arrayOf(R.mipmap.home_page_unselected,
                     R.mipmap.interview_guide_unselected,
+                    R.mipmap.ask_every_day_unselected,
                     R.mipmap.ask_every_day_unselected,
                     R.mipmap.my_page_unselected))
 
@@ -41,7 +43,7 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initData() {
-        buttons = arrayOf(home_page, interview_guide, ask_every_day, my_page)
+        buttons = arrayOf(home_page, interview_guide, ask_every_day,nav_button, my_page)
         switchFragment(fragments[0])
     }
 

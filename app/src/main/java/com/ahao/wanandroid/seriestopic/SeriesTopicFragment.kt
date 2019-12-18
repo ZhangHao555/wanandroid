@@ -117,7 +117,6 @@ class SeriesTopicFragment : BaseFragment() {
         override fun getItem(position: Int): Fragment {
             return SeriesTopicFragmentItem.newInstance(categoryDataList[position].children)
         }
-
         override fun getCount() = categoryDataList.size
 
     }

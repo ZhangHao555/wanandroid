@@ -50,14 +50,18 @@ class WanAndroidHttpService {
         getDao(WanAndroidHttpDao::class.java).getCollectionList(pageIndex).execute().body()!!
     }
 
+    fun getNavList() = API<NavResponse>().execute {
+        getDao(WanAndroidHttpDao::class.java).getNavList().execute().body()!!
+    }
+
     private fun <T> getDao(clazz: Class<T>): T {
         return HttpManager.getDao(clazz)
     }
 
     class API<T> {
-        var onLoading: (() -> Unit)? = null
-        var onSuccess: ((result: JsonResult<T>) -> Unit)? = null
-        var onError: ((message: String, code: ErrorCode) -> Unit)? = null
+        private var onLoading: (() -> Unit)? = null
+        private var onSuccess: ((result: JsonResult<T>) -> Unit)? = null
+        private var onError: ((message: String, code: ErrorCode) -> Unit)? = null
 
         private val handler = CoroutineExceptionHandler { _, exception ->
             onError?.invoke(exception.message ?: "未知错误", ErrorCode.EXCEPTION)

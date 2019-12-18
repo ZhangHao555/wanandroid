@@ -13,6 +13,10 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
+
+import com.ahao.wanandroid.R;
+import com.ahao.wanandroid.util.CommonUtilKt;
+
 import static com.ahao.wanandroid.util.DensityUtilKt.dp2px;
 
 public class LoadingView extends View {
@@ -71,7 +75,7 @@ public class LoadingView extends View {
     }
 
     private void init() {
-        colors = new int[]{Color.parseColor("#FF62DFCB"), Color.parseColor("#FFACEBE3"), Color.parseColor("#FF00CEAA")};
+        colors = new int[]{CommonUtilKt.getColorWithApp(R.color.shallow_blue), CommonUtilKt.getColorWithApp(R.color.deep_blue), CommonUtilKt.getColorWithApp(R.color.shallow_blue)};
 
         int stepLength = itemGap + itemRadius * 2;
         leftXTranslation = new int[]{-stepLength, stepLength, stepLength, -stepLength};
