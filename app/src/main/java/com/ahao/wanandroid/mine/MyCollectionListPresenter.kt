@@ -2,7 +2,6 @@ package com.ahao.wanandroid.mine
 
 import com.ahao.wanandroid.baseview.ListViewPresenter
 import com.ahao.wanandroid.bean.response.CollectionListResponse
-import com.ahao.wanandroid.bean.response.HomePageListResponse
 import com.ahao.wanandroid.service.ServiceManager
 import com.ahao.wanandroid.service.WanAndroidHttpService
 import kotlinx.coroutines.Dispatchers
@@ -14,23 +13,30 @@ class MyCollectionListPresenter(val view: MyCollectionContract.View<CollectionLi
 
     override fun loadListData() {
         GlobalScope.launch(Dispatchers.Main) {
-            val result = ServiceManager.getService(WanAndroidHttpService::class.java)?.getCollectionList(page)
-            if (result == null || !result.isOK()) {
-                view.showErrorView("获取列表失败")
-            } else {
-                view.showData(result.data.datas, result.data.total)
-            }
+            ServiceManager.getService(WanAndroidHttpService::class.java)?.getCollectionList(page)
+                    ?.onLoading {
+                        view.showLoading()
+                    }?.onSuccess {
+                        view.showData(it.data.datas, it.data.total)
+                    }?.onError { _, _ ->
+                        view.finishLoadView()
+                        view.showErrorView("获取列表失败")
+                    }
+
         }
     }
 
     override fun loadMoreListData() {
         GlobalScope.launch(Dispatchers.Main) {
-            val result = ServiceManager.getService(WanAndroidHttpService::class.java)?.getCollectionList(++page)
-            if (result == null || !result.isOK()) {
-                view.showToast("获取列表失败")
-            } else {
-                view.showMore(result.data.datas, result.data.total)
-            }
+            ServiceManager.getService(WanAndroidHttpService::class.java)?.getCollectionList(++page)
+                    ?.onLoading {
+                        view.showLoading()
+                    }?.onSuccess {
+                        view.showMore(it.data.datas, it.data.total)
+                    }?.onError { _, _ ->
+                        view.finishLoadView()
+                        view.showToast("获取列表失败")
+                    }
         }
     }
 }

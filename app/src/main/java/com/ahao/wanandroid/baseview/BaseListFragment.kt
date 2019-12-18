@@ -36,7 +36,6 @@ abstract class BaseListFragment<T> : BaseFragment(), ListViewInterface<T> {
     protected abstract fun initLayoutManager(): RecyclerView.LayoutManager
 
     open fun initDataSource() {
-        showProgressDialog()
         presenter.loadListData()
     }
 
@@ -100,18 +99,14 @@ abstract class BaseListFragment<T> : BaseFragment(), ListViewInterface<T> {
     override fun finishLoadView() {
         swipe_refresh_layout.finishLoadMore()
         swipe_refresh_layout.finishRefresh()
-        hideProgressDialog()
+        progressDialog?.hide()
     }
 
-    fun showProgressDialog() {
+    override fun showLoading() {
         if (progressDialog == null) {
             progressDialog = ProgressDialog(activity!!)
         }
         progressDialog?.show()
-    }
-
-    fun hideProgressDialog() {
-        progressDialog?.hide()
     }
 
 }

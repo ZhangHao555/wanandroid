@@ -12,10 +12,9 @@ import com.ahao.wanandroid.baseview.BaseFragment
 import com.ahao.wanandroid.bean.response.CategoryItem
 import com.ahao.wanandroid.service.ServiceManager
 import com.ahao.wanandroid.service.WanAndroidHttpService
+import com.ahao.wanandroid.util.ToastUtil
+import com.ahao.wanandroid.view.ProgressDialog
 import kotlinx.android.synthetic.main.fragment_project_page.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -27,8 +26,9 @@ import net.lucode.hackware.magicindicator.buildins.commonnavigator.titles.ColorT
 
 class ProjectPageFragment : BaseFragment() {
     val tabDataSource = mutableListOf<CategoryItem>()
-    var indicatorAdapter : CommonNavigatorAdapter? = null
-    var viewPagerAdapter : ProjectPageAdapter ? = null
+    var indicatorAdapter: CommonNavigatorAdapter? = null
+    var viewPagerAdapter: ProjectPageAdapter? = null
+    var progressDialog: ProgressDialog? = null
 
     override fun getLayoutRes(): Int {
         return R.layout.fragment_project_page
@@ -43,16 +43,15 @@ class ProjectPageFragment : BaseFragment() {
     }
 
 
-
     private fun initData() {
         val navigator = CommonNavigator(activity)
-        indicatorAdapter =  object :CommonNavigatorAdapter(){
+        indicatorAdapter = object : CommonNavigatorAdapter() {
             override fun getTitleView(p0: Context?, index: Int): IPagerTitleView {
                 val colorTransitionPagerTitleView = ColorTransitionPagerTitleView(context)
                 colorTransitionPagerTitleView.normalColor = Color.GRAY
                 colorTransitionPagerTitleView.selectedColor = Color.BLACK
                 colorTransitionPagerTitleView.setText(tabDataSource[index].name)
-                colorTransitionPagerTitleView.setOnClickListener { view_pager.setCurrentItem(index)}
+                colorTransitionPagerTitleView.setOnClickListener { view_pager.setCurrentItem(index) }
                 return colorTransitionPagerTitleView
             }
 
@@ -68,23 +67,38 @@ class ProjectPageFragment : BaseFragment() {
         }
         navigator.adapter = indicatorAdapter
         indicator.navigator = navigator
-        ViewPagerHelper.bind(indicator,view_pager)
+        ViewPagerHelper.bind(indicator, view_pager)
 
-        viewPagerAdapter = ProjectPageAdapter(childFragmentManager!!)
+        viewPagerAdapter = ProjectPageAdapter(childFragmentManager)
         view_pager.adapter = viewPagerAdapter
     }
 
 
     private fun initDataSource() {
-        GlobalScope.launch(Dispatchers.Main){
-            val result = ServiceManager.getService(WanAndroidHttpService::class.java)?.getProjectCategory()
-            if(result != null && result.data.isNotEmpty()){
-                tabDataSource.clear()
-                tabDataSource.addAll(result.data)
-                indicatorAdapter?.notifyDataSetChanged()
-                viewPagerAdapter?.notifyDataSetChanged()
-            }
+        ServiceManager.getService(WanAndroidHttpService::class.java)?.getProjectCategory()
+                ?.onLoading {
+                    showProgressDialog()
+                }?.onError { message, code ->
+                    hideProgressDialog()
+                    ToastUtil.toast(message)
+                }?.onSuccess {
+                    tabDataSource.clear()
+                    tabDataSource.addAll(it.data)
+                    indicatorAdapter?.notifyDataSetChanged()
+                    viewPagerAdapter?.notifyDataSetChanged()
+                    hideProgressDialog()
+                }
+    }
+
+    private fun hideProgressDialog() {
+        progressDialog?.hide()
+    }
+
+    private fun showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = ProgressDialog(activity!!)
         }
+        progressDialog?.show()
     }
 
     private fun initEvent() {
@@ -93,10 +107,10 @@ class ProjectPageFragment : BaseFragment() {
 
 
     inner class ProjectPageAdapter(fragmentManager: FragmentManager)
-        : FragmentPagerAdapter(fragmentManager){
+        : FragmentPagerAdapter(fragmentManager) {
         override fun getItem(position: Int) = ProjectItemFragment.newInstance(tabDataSource[position].id)
 
-        override fun getCount()= tabDataSource.size
+        override fun getCount() = tabDataSource.size
     }
 
     val TAG = "ProjectPageFragment"

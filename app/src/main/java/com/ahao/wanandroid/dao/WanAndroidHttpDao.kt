@@ -13,14 +13,14 @@ interface WanAndroidHttpDao {
 
     @POST(API.LOGIN)
     @FormUrlEncoded
-    fun login(@Field("username") username: String?,
-              @Field("password") password: String?): Observable<JsonResult<UserInfo>>
+    fun login(@Field("username") username: String,
+              @Field("password") password: String): Call<JsonResult<UserInfo>>
 
     @POST(API.REGISTER)
     @FormUrlEncoded
-    fun register(@Field("username") username: String?,
-                 @Field("password") password: String?,
-                 @Field("repassword") repassword: String?): Observable<JsonResult<JsonElement>>
+    fun register(@Field("username") username: String,
+                 @Field("password") password: String,
+                 @Field("repassword") repassword: String): Call<JsonResult<String?>>
 
     @GET(API.MAIN_PAGE_LIST)
     fun getMainPageList(@Path("page") page: Int): Call<JsonResult<HomePageListResponse>>
@@ -38,11 +38,11 @@ interface WanAndroidHttpDao {
     fun getSeriesTopicList(@Path("page") page: Int, @Query("cid") category: Int): Call<JsonResult<HomePageListResponse>>
 
     @POST(API.COLLECT)
-    fun collect(@Path("id") page: Int): Call<JsonResult<String>>
+    fun collect(@Path("id") page: Int): Call<JsonResult<String?>>
 
     @POST(API.CANCEL_COLLECT)
-    fun cancelCollect(@Path("id") page: Int): Call<JsonResult<String>>
+    fun cancelCollect(@Path("id") page: Int): Call<JsonResult<String?>>
 
     @GET(API.COLLECTION_LIST)
-    fun getCollectionList(@Path("page") page: Int): Call<JsonResult<CollectionListResponse?>>
+    fun getCollectionList(@Path("page") page: Int): Call<JsonResult<CollectionListResponse>>
 }

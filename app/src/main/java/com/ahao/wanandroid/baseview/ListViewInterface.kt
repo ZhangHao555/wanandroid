@@ -6,4 +6,5 @@ interface ListViewInterface<T> {
     fun showErrorView(message: String)
     fun showToast(message: String)
     fun finishLoadView()
+    fun showLoading()
 }

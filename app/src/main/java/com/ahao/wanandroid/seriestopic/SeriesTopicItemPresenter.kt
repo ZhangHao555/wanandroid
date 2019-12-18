@@ -5,43 +5,37 @@ import com.ahao.wanandroid.baseview.ListViewPresenter
 import com.ahao.wanandroid.bean.response.HomePageListResponse
 import com.ahao.wanandroid.service.ServiceManager
 import com.ahao.wanandroid.service.WanAndroidHttpService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
-class SeriesTopicItemPresenter(val view : ListViewInterface<HomePageListResponse.Item>, var category:Int = 0) : ListViewPresenter{
+class SeriesTopicItemPresenter(val view: ListViewInterface<HomePageListResponse.Item>, var category: Int = 0) : ListViewPresenter {
     private var pageIndex = 0
 
     override fun loadListData() {
-        GlobalScope.launch(Dispatchers.Main) {
-            val result  = ServiceManager.getService(WanAndroidHttpService::class.java)?.getSeriesTopicList(pageIndex,category)
-            if(result == null){
-                view.showErrorView("error")
-            }else{
-                if(!result.isOK()){
-                    view.showErrorView("not ok")
-                }else{
-                    view.showData(result.data.datas,result.data.total)
+        ServiceManager.getService(WanAndroidHttpService::class.java)
+                ?.getSeriesTopicList(pageIndex, category)
+                ?.onLoading {
+                    view.showLoading()
+                }?.onError { message, code ->
+                    view.finishLoadView()
+                    view.showErrorView(message)
+                }?.onSuccess {
+                    view.showData(it.data.datas, it.data.total)
                 }
-            }
-        }
+
     }
 
     override fun loadMoreListData() {
-        GlobalScope.launch(Dispatchers.Main) {
-            val result  = ServiceManager.getService(WanAndroidHttpService::class.java)?.getSeriesTopicList(pageIndex++,category)
-            if(result == null){
-                view.showErrorView("error")
-            }else{
-                if(!result.isOK()){
-                    view.showToast("not ok")
-                }else{
-                    view.showMore(result.data.datas,result.data.total)
+        ServiceManager.getService(WanAndroidHttpService::class.java)
+                ?.getSeriesTopicList(++pageIndex, category)
+                ?.onLoading {
+                    view.showLoading()
+                }?.onError { message, _ ->
+                    view.finishLoadView()
+                    view.showToast(message)
+                }?.onSuccess {
+                    view.showMore(it.data.datas, it.data.total)
                 }
-            }
-        }
-    }
 
+    }
 
 
 }

@@ -5,80 +5,49 @@ import com.ahao.wanandroid.bean.request.RegisterRequest
 import com.ahao.wanandroid.bean.response.*
 import com.ahao.wanandroid.dao.WanAndroidHttpDao
 import com.ahao.wanandroid.util.isNetWorkConnected
-import com.google.gson.JsonElement
-import io.reactivex.Observable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.lang.Exception
+import kotlinx.coroutines.*
+import kotlin.Exception
 
 class WanAndroidHttpService {
 
-    fun login(request: LoginRequest): Observable<JsonResult<UserInfo>> {
-        return getDao(WanAndroidHttpDao::class.java).login(request.username, request.password)
+    fun login(request: LoginRequest) = API<UserInfo>().execute {
+        getDao(WanAndroidHttpDao::class.java).login(request.username, request.password).execute().body()!!
     }
 
-    fun register(request: RegisterRequest): Observable<JsonResult<JsonElement>> {
-        return getDao(WanAndroidHttpDao::class.java).register(request.username, request.password, request.repassword)
+    fun register(request: RegisterRequest) = API<String?>().execute {
+        getDao(WanAndroidHttpDao::class.java).register(request.username, request.password, request.repassword).execute().body()!!
     }
 
-    suspend fun getHomePageList(pageIndex: Int): JsonResult<HomePageListResponse>? = withContext(Dispatchers.IO) {
-        try {
-            getDao(WanAndroidHttpDao::class.java).getMainPageList(pageIndex).execute().body()
-        } catch (e: Exception) {
-            null
-        }
+    fun getHomePageList(pageIndex: Int) = API<HomePageListResponse>().execute {
+        getDao(WanAndroidHttpDao::class.java).getMainPageList(pageIndex).execute().body()!!
     }
 
-    suspend fun getProjectCategory(): JsonResult<List<CategoryItem>>? = withContext(Dispatchers.IO) {
-        getDao(WanAndroidHttpDao::class.java).getProjectCategory().execute().body()
+    fun getProjectCategory() = API<List<CategoryItem>>().execute {
+        getDao(WanAndroidHttpDao::class.java).getProjectCategory().execute().body()!!
     }
 
-    suspend fun getProjectList(pageIndex: Int, categoryId: Int): JsonResult<HomePageListResponse>? = withContext(Dispatchers.IO) {
-        try {
-            getDao(WanAndroidHttpDao::class.java).getProjectList(pageIndex, categoryId).execute().body()
-        } catch (e: Exception) {
-            null
-        }
+    fun getProjectList(pageIndex: Int, categoryId: Int) = API<HomePageListResponse>().execute {
+        getDao(WanAndroidHttpDao::class.java).getProjectList(pageIndex, categoryId).execute().body()!!
     }
 
-    suspend fun getSeriesTopicCategory(): JsonResult<List<CategoryItem>>? = withContext(Dispatchers.IO) {
-        try {
-            getDao(WanAndroidHttpDao::class.java).getSeriesTopicCategory().execute().body()
-        } catch (e: Exception) {
-            null
-        }
+    fun getSeriesTopicCategory() = API<List<CategoryItem>>().execute {
+        getDao(WanAndroidHttpDao::class.java).getSeriesTopicCategory().execute().body()!!
     }
 
-    suspend fun getSeriesTopicList(pageIndex: Int, categoryId: Int): JsonResult<HomePageListResponse>? = withContext(Dispatchers.IO) {
-        try {
-            getDao(WanAndroidHttpDao::class.java).getSeriesTopicList(pageIndex, categoryId).execute().body()
-        } catch (e: Exception) {
-            null
-        }
+    fun getSeriesTopicList(pageIndex: Int, categoryId: Int) = API<HomePageListResponse>().execute {
+        getDao(WanAndroidHttpDao::class.java).getSeriesTopicList(pageIndex, categoryId).execute().body()!!
     }
 
-    suspend fun collect(id: Int): JsonResult<String>? = withContext(Dispatchers.IO) {
-        try {
-            getDao(WanAndroidHttpDao::class.java).collect(id).execute().body()
-        } catch (e: Exception) {
-            null
-        }
+    fun collect(id: Int) = API<String?>().execute {
+        getDao(WanAndroidHttpDao::class.java).collect(id).execute().body()!!
     }
 
-    suspend fun cancelCollect(id: Int): JsonResult<String>? = withContext(Dispatchers.IO) {
-        try {
-            getDao(WanAndroidHttpDao::class.java).cancelCollect(id).execute().body()
-        } catch (e: Exception) {
-            null
-        }
+    fun cancelCollect(id: Int) = API<String?>().execute {
+        getDao(WanAndroidHttpDao::class.java).cancelCollect(id).execute().body()!!
     }
 
-    fun getCollectionList(pageIndex: Int): API<CollectionListResponse> {
-        return API<CollectionListResponse>().execute {
-            getDao(WanAndroidHttpDao::class.java).getCollectionList(pageIndex).execute().body()
-        }
+    fun getCollectionList(pageIndex: Int) = API<CollectionListResponse>().execute {
+        getDao(WanAndroidHttpDao::class.java).getCollectionList(pageIndex).execute().body()!!
     }
 
     private fun <T> getDao(clazz: Class<T>): T {
@@ -87,15 +56,25 @@ class WanAndroidHttpService {
 
     class API<T> {
         var onLoading: (() -> Unit)? = null
-        var onSuccess: ((result: JsonResult<T?>?) -> Unit)? = null
+        var onSuccess: ((result: JsonResult<T>) -> Unit)? = null
         var onError: ((message: String, code: ErrorCode) -> Unit)? = null
 
-        fun execute(executor: suspend () -> JsonResult<T?>?): API<T> {
+        private val handler = CoroutineExceptionHandler { _, exception ->
+            onError?.invoke(exception.message ?: "未知错误", ErrorCode.EXCEPTION)
+        }
+
+        fun execute(executor: suspend () -> JsonResult<T>): API<T> {
             try {
-                GlobalScope.launch(Dispatchers.Main) {
+                GlobalScope.launch(Dispatchers.Main + handler) {
                     onLoading?.invoke()
-                    val result = executor.invoke()
-                    onSuccess?.invoke(result)
+                    val result = withContext(Dispatchers.IO) {
+                        executor.invoke()
+                    }
+                    if (result.isOK()) {
+                        onSuccess?.invoke(result)
+                    } else {
+                        onError?.invoke(result.errorMsg, ErrorCode.API_ERROR)
+                    }
                 }
             } catch (e: Exception) {
                 if (isNetWorkConnected()) {
@@ -112,7 +91,7 @@ class WanAndroidHttpService {
             return this
         }
 
-        fun onSuccess(onSuccess: (result: JsonResult<T?>?) -> Unit): API<T> {
+        fun onSuccess(onSuccess: (result: JsonResult<T>) -> Unit): API<T> {
             this.onSuccess = onSuccess
             return this
         }
@@ -121,11 +100,9 @@ class WanAndroidHttpService {
             this.onError = onError
             return this
         }
-
     }
 
-
     enum class ErrorCode {
-        EXCEPTION, NET_ERROR
+        EXCEPTION, NET_ERROR, API_ERROR
     }
 }

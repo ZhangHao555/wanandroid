@@ -7,22 +7,21 @@ import com.ahao.wanandroid.rxbus.RxBus
 import com.ahao.wanandroid.view.ProgressDialog
 import io.reactivex.disposables.Disposable
 
+@SuppressLint("Registered")
 open class BaseActivity : AppCompatActivity() {
 
-    private lateinit var progressDialog: ProgressDialog
+    private var progressDialog: ProgressDialog? = null
     private var disposable: Disposable? = null
 
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        progressDialog = ProgressDialog(this)
-
         disposable = RxBus.toObservable(this.javaClass.toString()).subscribe({
             if (it.data is Boolean) {
                 if (it.data) {
-                    progressDialog.show()
+                    showProgressDialog()
                 } else {
-                    progressDialog.hide()
+                    hideProgressDialog()
                 }
             }
         }, {
@@ -30,9 +29,20 @@ open class BaseActivity : AppCompatActivity() {
         })
     }
 
+    protected fun hideProgressDialog() {
+        progressDialog?.hide()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         disposable?.dispose()
         disposable = null
+    }
+
+    protected fun showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = ProgressDialog(this)
+        }
+        progressDialog?.show()
     }
 }

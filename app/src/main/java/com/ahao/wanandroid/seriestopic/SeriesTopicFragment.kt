@@ -7,18 +7,15 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.ahao.wanandroid.R
 import com.ahao.wanandroid.baseview.BaseFragment
 import com.ahao.wanandroid.bean.response.CategoryItem
 import com.ahao.wanandroid.service.ServiceManager
 import com.ahao.wanandroid.service.WanAndroidHttpService
+import com.ahao.wanandroid.view.ProgressDialog
 import kotlinx.android.synthetic.main.fragment_project_page.view_pager
 import kotlinx.android.synthetic.main.fragment_series_topic.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import net.lucode.hackware.magicindicator.ViewPagerHelper
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 import net.lucode.hackware.magicindicator.buildins.commonnavigator.abs.CommonNavigatorAdapter
@@ -32,7 +29,7 @@ class SeriesTopicFragment : BaseFragment() {
     private val categoryDataList: MutableList<CategoryItem> = mutableListOf()
     private lateinit var viewPagerAdapter: SeriesItemAdapter
     private lateinit var indicatorAdapter: CommonNavigatorAdapter
-
+    private var progressDialog: ProgressDialog? = null
     override fun getLayoutRes() = R.layout.fragment_series_topic
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -79,17 +76,28 @@ class SeriesTopicFragment : BaseFragment() {
     }
 
     private fun initDataSource() {
-        GlobalScope.launch(Dispatchers.Main) {
-            val result = ServiceManager.getService(WanAndroidHttpService::class.java)?.getSeriesTopicCategory()
-            if (result == null) {
-                showErrorPage()
-            } else {
-                if (result.isOK()) {
-                    notifyCategoryDataChanged(result.data)
+        ServiceManager.getService(WanAndroidHttpService::class.java)
+                ?.getSeriesTopicCategory()
+                ?.onLoading {
+                    showProgressDialog()
+                }?.onError { _, _ ->
+                    hideProgressDialog()
+                    showErrorPage()
+                }?.onSuccess {
+                    hideProgressDialog()
+                    notifyCategoryDataChanged(it.data)
                 }
-            }
-        }
+    }
 
+    private fun hideProgressDialog() {
+        progressDialog?.hide()
+    }
+
+    private fun showProgressDialog() {
+        if (progressDialog == null) {
+            progressDialog = ProgressDialog(activity!!)
+        }
+        progressDialog?.show()
     }
 
     private fun notifyCategoryDataChanged(data: List<CategoryItem>) {

@@ -41,7 +41,6 @@ object HttpManager {
                 .baseUrl(baseUrl)
                 .client(client.build())
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
                 .create(clazz)
     }
