@@ -2,24 +2,21 @@ package com.ahao.wanandroid
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import com.ahao.wanandroid.baseview.BaseActivity
 import com.ahao.wanandroid.homepage.HomePageFragment
 import com.ahao.wanandroid.mine.MineFragment
+import com.ahao.wanandroid.nav.NavFragment
 import com.ahao.wanandroid.projeect.ProjectPageFragment
 import com.ahao.wanandroid.seriestopic.SeriesTopicFragment
-import com.ahao.wanandroid.view.ProgressDialog
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : BaseActivity() {
 
-    private var fragments: List<Fragment> = listOf(HomePageFragment(), ProjectPageFragment(), SeriesTopicFragment(),NavFragment(), MineFragment())
+    private var fragments: List<Fragment> = listOf(HomePageFragment(), ProjectPageFragment(), SeriesTopicFragment(), NavFragment(), MineFragment())
     private var currentFragment: Fragment? = null
 
     private val icons = arrayOf(arrayOf(R.mipmap.home_page_selected,

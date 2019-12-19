@@ -15,9 +15,10 @@ import com.ahao.wanandroid.service.WanAndroidHttpService
 import com.ahao.wanandroid.util.ToastUtil
 
 class LoginActivity : BaseActivity() {
+    override fun getResLayoutId() = R.layout.activity_login
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
         initEvent()
     }
 

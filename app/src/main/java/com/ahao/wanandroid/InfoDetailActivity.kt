@@ -10,9 +10,10 @@ import com.ahao.wanandroid.util.ToastUtil
 import kotlinx.android.synthetic.main.activity_info_detail.*
 
 class InfoDetailActivity : BaseActivity() {
+    override fun getResLayoutId() = R.layout.activity_info_detail
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_info_detail)
         initData()
     }
 

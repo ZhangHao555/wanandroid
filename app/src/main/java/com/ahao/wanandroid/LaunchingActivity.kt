@@ -6,6 +6,7 @@ import com.ahao.wanandroid.baseview.BaseActivity
 import com.ahao.wanandroid.user.LoginActivity
 
 class LaunchingActivity : BaseActivity() {
+    override fun getResLayoutId() = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

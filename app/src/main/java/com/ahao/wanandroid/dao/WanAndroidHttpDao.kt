@@ -47,5 +47,5 @@ interface WanAndroidHttpDao {
     fun getCollectionList(@Path("page") page: Int): Call<JsonResult<CollectionListResponse>>
 
     @GET(API.NAV_LIST)
-    fun getNavList(): Call<JsonResult<NavResponse>>
+    fun getNavList(): Call<JsonResult<MutableList<ArticleCategory>>>
 }

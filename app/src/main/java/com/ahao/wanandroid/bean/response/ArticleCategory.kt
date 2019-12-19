@@ -1,6 +1,6 @@
 package com.ahao.wanandroid.bean.response
 
-data class NavResponse(var cid: Int, var name: String, var articles: MutableList<Article>) {
+data class ArticleCategory(var cid: Int, var name: String, var articles: MutableList<Article>) {
 
     data class Article(var apkLink: String,
                        var audit: Int,
@@ -17,7 +17,7 @@ data class NavResponse(var cid: Int, var name: String, var articles: MutableList
                        var niceShareDate: String,
                        var origin: String,
                        var publishTime: Long,
-                       var tile: String,
+                       var title: String,
                        var type: Int,
                        var zan: Int)
 

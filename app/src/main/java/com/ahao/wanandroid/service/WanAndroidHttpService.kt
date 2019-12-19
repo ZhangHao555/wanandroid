@@ -50,7 +50,7 @@ class WanAndroidHttpService {
         getDao(WanAndroidHttpDao::class.java).getCollectionList(pageIndex).execute().body()!!
     }
 
-    fun getNavList() = API<NavResponse>().execute {
+    fun getNavList() = API<MutableList<ArticleCategory>>().execute {
         getDao(WanAndroidHttpDao::class.java).getNavList().execute().body()!!
     }
 

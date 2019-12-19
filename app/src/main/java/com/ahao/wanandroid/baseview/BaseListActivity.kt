@@ -23,7 +23,6 @@ abstract class BaseListActivity<T> : BaseActivity(), ListViewInterface<T> {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getLayoutId())
         recyclerView = findViewById(R.id.recycler_view)
         refreshLayout = findViewById(R.id.swipe_refresh_layout)
 
@@ -101,7 +100,6 @@ abstract class BaseListActivity<T> : BaseActivity(), ListViewInterface<T> {
     }
 
 
-    abstract fun getLayoutId(): Int
     protected abstract fun initPresenter(): ListViewPresenter
     protected abstract fun initAdapter(): BaseQuickAdapter<*, BaseViewHolder>
     protected abstract fun initLayoutManager(): RecyclerView.LayoutManager

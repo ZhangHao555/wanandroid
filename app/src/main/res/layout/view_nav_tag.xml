@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ahao.wanandroid.view.TagView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="5dp"
+    android:layout_marginTop="5dp"
+    app:borderRadius="5dp"
+    android:padding="5dp"
+    app:borderWidth="1dp"
+    app:drawStyle="fill"
+    tools:text="12321" />
+
+
+

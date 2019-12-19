@@ -71,7 +71,8 @@ abstract class BaseListFragment<T> : BaseFragment(), ListViewInterface<T> {
             dataSource.addAll(listData)
             adapter.notifyDataSetChanged()
         }
-        swipe_refresh_layout.setEnableAutoLoadMore(total <= dataSource.size)
+        swipe_refresh_layout.setEnableLoadMore(total > dataSource.size)
+        swipe_refresh_layout.setEnableAutoLoadMore(total >dataSource.size)
         finishLoadView()
     }
 
@@ -84,7 +85,8 @@ abstract class BaseListFragment<T> : BaseFragment(), ListViewInterface<T> {
             dataSource.addAll(listData)
             adapter.notifyDataSetChanged()
         }
-        swipe_refresh_layout.setEnableAutoLoadMore(total <= dataSource.size)
+        swipe_refresh_layout.setEnableLoadMore(total > dataSource.size)
+        swipe_refresh_layout.setEnableAutoLoadMore(total > dataSource.size)
         finishLoadView()
     }
 

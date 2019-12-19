@@ -16,9 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class MyCollectionListActivity : BaseListActivity<CollectionListResponse.Item>(), MyCollectionContract.View<CollectionListResponse.Item> {
-
-    override fun getLayoutId() = R.layout.activity_my_collection_list
-
+    override fun getResLayoutId() = R.layout.activity_my_collection_list
     override fun initPresenter() = MyCollectionListPresenter(this)
     override fun initAdapter() = MyCollectionListAdapter(dataSource, R.layout.view_my_collection_list_item)
 

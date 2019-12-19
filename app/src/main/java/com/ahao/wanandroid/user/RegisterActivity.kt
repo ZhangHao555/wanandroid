@@ -16,9 +16,10 @@ import kotlinx.android.synthetic.main.activity_login.password
 import kotlinx.android.synthetic.main.activity_login.username
 
 class RegisterActivity : BaseActivity() {
+    override fun getResLayoutId() = R.layout.activity_register
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register)
         initEvent()
     }
 

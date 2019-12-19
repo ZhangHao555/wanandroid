@@ -8,7 +8,7 @@ import com.ahao.wanandroid.view.ProgressDialog
 import io.reactivex.disposables.Disposable
 
 @SuppressLint("Registered")
-open class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity() {
 
     private var progressDialog: ProgressDialog? = null
     private var disposable: Disposable? = null
@@ -27,7 +27,11 @@ open class BaseActivity : AppCompatActivity() {
         }, {
 
         })
+
+        setContentView(getResLayoutId())
     }
+
+    abstract fun getResLayoutId():Int
 
     protected fun hideProgressDialog() {
         progressDialog?.hide()
