@@ -10,6 +10,7 @@
     android:padding="5dp"
     app:borderWidth="1dp"
     app:drawStyle="fill"
+    android:textSize="17sp"
     tools:text="12321" />
 
 

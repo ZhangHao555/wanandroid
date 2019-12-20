@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : BaseActivity() {
+    override fun getResLayoutId() = R.layout.activity_main
 
     private var fragments: List<Fragment> = listOf(HomePageFragment(), ProjectPageFragment(), SeriesTopicFragment(), NavFragment(), MineFragment())
     private var currentFragment: Fragment? = null
@@ -34,7 +35,6 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         initData()
         initEvent()
     }

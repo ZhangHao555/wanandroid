@@ -15,6 +15,17 @@ class TagLayout(context: Context, attributeSet: AttributeSet) : ViewGroup(contex
 
     var singleLine = false
 
+    var onItemClickedListener: ((Int, View) -> Unit)? = null
+        set(value) {
+            field = value
+            (0 until childCount).forEach { position ->
+                getChildAt(position).setOnClickListener {
+                    onItemClickedListener?.invoke(position, it)
+                }
+            }
+        }
+
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         (0 until childCount).map {
             getChildAt(it)
@@ -65,10 +76,6 @@ class TagLayout(context: Context, attributeSet: AttributeSet) : ViewGroup(contex
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        if (!changed) {
-            return
-        }
-
         var xOffset = paddingLeft
         var yOffset = paddingTop
 
@@ -113,4 +120,5 @@ class TagLayout(context: Context, attributeSet: AttributeSet) : ViewGroup(contex
         constructor(context: Context, attributeSet: AttributeSet) : super(context, attributeSet)
         constructor(layoutParams: ViewGroup.LayoutParams) : super(layoutParams)
     }
+
 }

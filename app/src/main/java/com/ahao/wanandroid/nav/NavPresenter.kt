@@ -12,10 +12,11 @@ class NavPresenter(val view: ListViewInterface<ArticleCategory>) : ListViewPrese
         ServiceManager.getService(WanAndroidHttpService::class.java)
                 ?.getNavList()
                 ?.onLoading { view.showLoading() }
-                ?.onError { message, code ->
+                ?.onError { message, _ ->
                     view.finishLoadView()
                     view.showErrorView(message)
-                }?.onSuccess {
+                }
+                ?.onSuccess {
                     view.finishLoadView()
                     view.showData(it.data, it.data.size)
                 }
