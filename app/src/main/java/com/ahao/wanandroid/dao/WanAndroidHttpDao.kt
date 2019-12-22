@@ -48,4 +48,12 @@ interface WanAndroidHttpDao {
 
     @GET(API.NAV_LIST)
     fun getNavList(): Call<JsonResult<MutableList<ArticleCategory>>>
+
+    @GET(API.HOT_KEY)
+    fun getHotKeys(): Call<JsonResult<MutableList<HotKey>>>
+
+    @GET(API.HOT_KEY)
+    fun search(@Path("page") page: Int, @Query("k") keywords: String): Call<JsonResult<HomePageListResponse>>
+
+
 }

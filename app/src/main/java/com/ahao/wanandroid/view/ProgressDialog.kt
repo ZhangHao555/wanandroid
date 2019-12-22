@@ -20,7 +20,6 @@ class ProgressDialog(context: Context) : Dialog(context) {
         }
 
         setCanceledOnTouchOutside(false)
-        setCancelable(false)
     }
 
 

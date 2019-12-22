@@ -16,4 +16,6 @@ object API {
     const val CANCEL_COLLECT = "lg/uncollect_originId/{id}/json"
     const val COLLECTION_LIST = "lg/collect/list/{page}/json"
     const val NAV_LIST = "navi/json"
+    const val HOT_KEY = "hotkey/json"
+    const val SEARCH = "article/query/{page}/json"
 }

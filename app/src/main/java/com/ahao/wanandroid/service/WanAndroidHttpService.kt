@@ -54,6 +54,14 @@ class WanAndroidHttpService {
         getDao(WanAndroidHttpDao::class.java).getNavList().execute().body()!!
     }
 
+    fun getHotKeys() = API<MutableList<HotKey>>().execute {
+        getDao(WanAndroidHttpDao::class.java).getHotKeys().execute().body()!!
+    }
+
+    fun search(page: Int, keywords: String) = API<HomePageListResponse>().execute {
+        getDao(WanAndroidHttpDao::class.java).search(page, keywords).execute().body()!!
+    }
+
     private fun <T> getDao(clazz: Class<T>): T {
         return HttpManager.getDao(clazz)
     }

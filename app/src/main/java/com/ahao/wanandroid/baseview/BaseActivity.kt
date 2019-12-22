@@ -23,7 +23,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private var progressDialog: ProgressDialog? = null
     private var disposable: Disposable? = null
-    private lateinit var statusView: View
+    protected lateinit var statusView: View
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

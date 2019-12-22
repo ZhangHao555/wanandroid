@@ -83,10 +83,10 @@ class Preference<T>(val name: String, private val default: T, private var commit
         val baos = ByteArrayOutputStream()
         val objectOutputStream = ObjectOutputStream(baos)
         objectOutputStream.writeObject(obj)
-        val toString = baos.toString("UTF-8")
+        val toString = baos.toByteArray()
         objectOutputStream.close()
         baos.close()
-        return toString
+        return String(toString)
     }
 
 }

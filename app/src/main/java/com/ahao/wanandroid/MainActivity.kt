@@ -10,8 +10,10 @@ import com.ahao.wanandroid.homepage.HomePageFragment
 import com.ahao.wanandroid.mine.MineFragment
 import com.ahao.wanandroid.nav.NavFragment
 import com.ahao.wanandroid.projeect.ProjectPageFragment
+import com.ahao.wanandroid.search.SearchActivity
 import com.ahao.wanandroid.seriestopic.SeriesTopicFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.view_search_layout.*
 
 
 class MainActivity : BaseActivity() {
@@ -35,12 +37,13 @@ class MainActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        statusView.background = getDrawable(R.drawable.mine_page_header_bg)
         initData()
         initEvent()
     }
 
     private fun initData() {
-        buttons = arrayOf(home_page, interview_guide, ask_every_day,nav_button, my_page)
+        buttons = arrayOf(home_page, interview_guide, ask_every_day, nav_button, my_page)
         switchFragment(fragments[0])
     }
 
@@ -49,6 +52,10 @@ class MainActivity : BaseActivity() {
             it.setOnClickListener {
                 switchFragment(fragments[buttons.indexOf(it)])
             }
+        }
+
+        view_bg.setOnClickListener {
+            startActivity(Intent(this@MainActivity, SearchActivity::class.java))
         }
     }
 

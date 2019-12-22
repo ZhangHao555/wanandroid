@@ -2,6 +2,7 @@ package com.ahao.wanandroid.util
 
 import android.content.Context
 import android.util.DisplayMetrics
+import android.util.TypedValue
 import android.view.WindowManager
 import androidx.core.content.ContextCompat.getSystemService
 import com.ahao.wanandroid.App
@@ -29,3 +30,5 @@ fun px2dp(context: Context, pxValue: Float): Int {
     val scale = context.resources.displayMetrics.density
     return (pxValue / scale + 0.5f).toInt()
 }
+
+fun getSp(textSize : Float) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,textSize, getDisplayMetrics())

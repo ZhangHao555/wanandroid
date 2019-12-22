@@ -12,8 +12,7 @@ class TagLayout(context: Context, attributeSet: AttributeSet) : ViewGroup(contex
     val HORIZONTAL = 2
 
     var orientation: Int = HORIZONTAL
-
-    var singleLine = false
+    var maxLines = Integer.MAX_VALUE
 
     var onItemClickedListener: ((Int, View) -> Unit)? = null
         set(value) {
@@ -38,12 +37,15 @@ class TagLayout(context: Context, attributeSet: AttributeSet) : ViewGroup(contex
         var widthResult = 0
         var heightResult = 0
         var singleLineMaxHeight = 0
+
+        var curLines = 1
         if (orientation == HORIZONTAL) {
             widthResult = MeasureSpec.getSize(widthMeasureSpec)
             var offset = 0
             (0 until childCount).forEach {
                 val lp = getChildAt(it).layoutParams as? MarginLayoutParams
-                if (offset + getWidthWithMargin(getChildAt(it), lp) > widthResult) {
+                if (offset + getWidthWithMargin(getChildAt(it), lp) > widthResult && curLines < maxLines) {
+                    curLines++
                     heightResult += singleLineMaxHeight
                     singleLineMaxHeight = 0
                     offset = 0
@@ -81,6 +83,7 @@ class TagLayout(context: Context, attributeSet: AttributeSet) : ViewGroup(contex
 
         var maxHeight = 0
 
+        var curLines = 1
         (0 until childCount)
                 .map { getChildAt(it) }
                 .forEach {
@@ -88,7 +91,7 @@ class TagLayout(context: Context, attributeSet: AttributeSet) : ViewGroup(contex
                     xOffset += lp.leftMargin
 
                     maxHeight = max(maxHeight, getHeightWithMargin(it, lp))
-                    if (xOffset + getWidthWithMargin(it, lp) > measuredWidth - paddingLeft - paddingRight) {
+                    if (xOffset + getWidthWithMargin(it, lp) > measuredWidth - paddingLeft - paddingRight && curLines < maxLines) {
                         yOffset += getHeightWithMargin(it, lp)
                         xOffset = paddingLeft + lp.leftMargin
                     }

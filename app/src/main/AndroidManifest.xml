@@ -29,6 +29,7 @@
         <activity android:name=".user.RegisterActivity" />
         <activity android:name=".InfoDetailActivity" />
         <activity android:name=".mine.MyCollectionListActivity" />
+        <activity android:name=".search.SearchActivity"/>
     </application>
 
 </manifest>
