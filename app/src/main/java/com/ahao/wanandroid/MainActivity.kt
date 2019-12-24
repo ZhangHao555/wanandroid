@@ -3,6 +3,10 @@ package com.ahao.wanandroid
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.ahao.wanandroid.baseview.BaseActivity
@@ -12,13 +16,27 @@ import com.ahao.wanandroid.nav.NavFragment
 import com.ahao.wanandroid.projeect.ProjectPageFragment
 import com.ahao.wanandroid.search.SearchActivity
 import com.ahao.wanandroid.seriestopic.SeriesTopicFragment
+import com.ahao.wanandroid.util.ToastUtil
+import com.ahao.wanandroid.util.dp2px
+import com.ahao.wanandroid.util.getColorWithApp
+import com.ahao.wanandroid.util.loge
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_search_layout.*
+import kotlinx.android.synthetic.main.view_title_layout.view.*
 
 
 class MainActivity : BaseActivity() {
-    override fun getResLayoutId() = R.layout.activity_main
 
+    companion object {
+        private const val QUIT_INTERVAL = 1000 * 1000 * 1000
+
+        fun newIntent(context: Context): Intent {
+            return Intent(context, MainActivity::class.java)
+        }
+    }
+
+    override fun getResLayoutId() = R.layout.activity_main
+    private var lastClickBackTime = 0L
     private var fragments: List<Fragment> = listOf(HomePageFragment(), ProjectPageFragment(), SeriesTopicFragment(), NavFragment(), MineFragment())
     private var currentFragment: Fragment? = null
 
@@ -45,6 +63,66 @@ class MainActivity : BaseActivity() {
     private fun initData() {
         buttons = arrayOf(home_page, interview_guide, ask_every_day, nav_button, my_page)
         switchFragment(fragments[0])
+
+        initTitleBar()
+    }
+
+    private fun initTitleBar() {
+        setSearchTitleBar()
+    }
+
+    private fun setSearchTitleBar() {
+        val searchView = LayoutInflater.from(this).inflate(R.layout.view_serach_title_bar, null, false).apply {
+            findViewById<EditText>(R.id.search_edit_text).apply {
+                isFocusable = false
+                isFocusableInTouchMode = false
+
+                setOnClickListener {
+                    startActivity(Intent(this@MainActivity, SearchActivity::class.java))
+                }
+            }
+            setOnClickListener {
+                startActivity(Intent(this@MainActivity, SearchActivity::class.java))
+            }
+        }
+        title_bar.setCenterView(searchView)
+
+        val rightText = TextView(this).apply {
+            textSize = 15f
+            setTextColor(getColorWithApp(R.color.white))
+            text = "搜索"
+
+            setOnClickListener {
+                startActivity(Intent(this@MainActivity, SearchActivity::class.java))
+            }
+        }
+        title_bar.setRightView(rightText)
+        (rightText.layoutParams as ViewGroup.MarginLayoutParams).rightMargin = dp2px(10f)
+
+        title_bar.left_container.setOnClickListener {
+            back()
+        }
+    }
+
+
+    private fun back() {
+        if (System.nanoTime() - lastClickBackTime < QUIT_INTERVAL) {
+            finish()
+        } else {
+            ToastUtil.toast("再按一次退出")
+            lastClickBackTime = System.nanoTime()
+        }
+    }
+
+    override fun onBackPressed() {
+        back()
+    }
+
+    private fun setSettingTitleBar() {
+        title_bar.setCenterView("个人中心")
+        title_bar.setRightView(ImageView(this).apply {
+            setImageResource(R.mipmap.icon_setting)
+        })
     }
 
     private fun initEvent() {
@@ -62,6 +140,12 @@ class MainActivity : BaseActivity() {
     private fun switchFragment(fragment: Fragment) {
         if (currentFragment == fragment) {
             return
+        }
+
+        if (fragment is MineFragment) {
+            setSettingTitleBar()
+        } else {
+            setSearchTitleBar()
         }
 
         supportFragmentManager.fragments.forEach {
@@ -86,10 +170,6 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    companion object {
-        fun newIntent(context: Context): Intent {
-            return Intent(context, MainActivity::class.java)
-        }
-    }
+
 
 }

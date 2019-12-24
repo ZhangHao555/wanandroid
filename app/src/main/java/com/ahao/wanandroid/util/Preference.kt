@@ -46,7 +46,7 @@ class Preference<T>(val name: String, private val default: T, private var commit
                     if (TextUtils.isEmpty(string)) {
                         return default
                     }
-                    return deSerialization(string)
+                    return deSerialization(string) ?: default
                 }
             }
             return ret as T
@@ -72,21 +72,31 @@ class Preference<T>(val name: String, private val default: T, private var commit
         }
     }
 
-    private fun deSerialization(string: String?): T {
-        val ois = ObjectInputStream(ByteArrayInputStream(string?.toByteArray(Charsets.UTF_8)))
-        val ret = ois.readObject() as T
-        ois.close()
-        return ret
+    private fun deSerialization(string: String): T?{
+        return try {
+            val ois = ObjectInputStream(ByteArrayInputStream(string.toByteArray(Charsets.ISO_8859_1)))
+            val ret = ois.readObject() as T
+            ois.close()
+            ret
+        }catch (e : Exception ){
+            loge(e.message)
+            null
+        }
     }
 
-    private fun <A> serialization(obj: A): String {
-        val baos = ByteArrayOutputStream()
-        val objectOutputStream = ObjectOutputStream(baos)
-        objectOutputStream.writeObject(obj)
-        val toString = baos.toByteArray()
-        objectOutputStream.close()
-        baos.close()
-        return String(toString)
+    private fun <A> serialization(obj: A): String? {
+        return try {
+            val baos = ByteArrayOutputStream()
+            val objectOutputStream = ObjectOutputStream(baos)
+            objectOutputStream.writeObject(obj)
+            val toString = baos.toByteArray()
+            objectOutputStream.close()
+            baos.close()
+            toString.toString(Charsets.ISO_8859_1)
+        }catch (e : Exception ){
+            loge(e.message)
+            null
+        }
     }
 
 }

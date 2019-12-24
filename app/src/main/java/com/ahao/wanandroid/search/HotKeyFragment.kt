@@ -13,10 +13,10 @@ import com.ahao.wanandroid.rxbus.Message
 import com.ahao.wanandroid.rxbus.RxBus
 import com.ahao.wanandroid.service.ServiceManager
 import com.ahao.wanandroid.service.WanAndroidHttpService
-import com.ahao.wanandroid.util.Preference
 import com.ahao.wanandroid.util.dp2px
 import com.ahao.wanandroid.util.getColorWithApp
 import com.ahao.wanandroid.view.TagView
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_hotkey.*
 
 class HotKeyFragment : BaseFragment() {
@@ -24,11 +24,24 @@ class HotKeyFragment : BaseFragment() {
 
     private val hotKeyData: MutableList<HotKey> = mutableListOf()
 
-    private val historyData : MutableList<HotKey> by Preference("SEARCH_HISTORY", mutableListOf(),false)
+    companion object{
+        const val REFRESH_HISTORY_CODE = "REFRESH_HISTORY_CODE"
+    }
+    private var disposable : Disposable? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initDataSource()
+
+        disposable = RxBus.toObservable(REFRESH_HISTORY_CODE)
+                .subscribe({
+                    initHistory()
+                }, {})
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        disposable?.dispose()
     }
 
     private fun initDataSource() {
@@ -59,7 +72,7 @@ class HotKeyFragment : BaseFragment() {
             val tagView = TagView(context!!).apply {
                 textSize = 11f
                 setPadding(dp2px(10f), dp2px(5f), dp2px(10f), dp2px(5f))
-                setTextColor(getColorWithApp(R.color.gray_middle))
+                setTextColor(getColorWithApp(R.color.gray))
                 borderColor = getColorWithApp(R.color.gray_shallow)
                 radius = dp2px(10f).toFloat()
                 drawStyle = Paint.Style.FILL
@@ -70,19 +83,20 @@ class HotKeyFragment : BaseFragment() {
             (tagView.layoutParams as? ViewGroup.MarginLayoutParams)?.topMargin = dp2px(10f)
         }
         hot_key_tag_layout.onItemClickedListener = { position, _ ->
-            RxBus.post(Message(SearchActivity.ACTION_SEARCH,hotKeyData[position]))
+            RxBus.post(Message(SearchActivity.ACTION_SEARCH, hotKeyData[position]))
         }
 
     }
 
-    private fun initHistory() {
-        history_tag_layout.visibility = if (historyData.isNotEmpty()) VISIBLE else GONE
+    fun initHistory() {
+        val historyKeys = HistoryKeyRepository.historyKeys
+        history_tag_layout.visibility = if (historyKeys.isNotEmpty()) VISIBLE else GONE
         history_tag_layout.removeAllViews()
-        historyData.forEach {
+        historyKeys.forEach {
             val tagView = TagView(context!!).apply {
                 textSize = 11f
                 setPadding(dp2px(10f), dp2px(5f), dp2px(10f), dp2px(5f))
-                setTextColor(getColorWithApp(R.color.gray_middle))
+                setTextColor(getColorWithApp(R.color.gray))
                 borderColor = getColorWithApp(R.color.gray_shallow)
                 radius = dp2px(10f).toFloat()
                 drawStyle = Paint.Style.FILL
@@ -92,10 +106,10 @@ class HotKeyFragment : BaseFragment() {
             (tagView.layoutParams as? ViewGroup.MarginLayoutParams)?.leftMargin = dp2px(10f)
             (tagView.layoutParams as? ViewGroup.MarginLayoutParams)?.topMargin = dp2px(10f)
         }
-    }
 
-    fun search(keywords:String){
-
+        history_tag_layout.onItemClickedListener = { position, _ ->
+            RxBus.post(Message(SearchActivity.ACTION_SEARCH, historyKeys[position]))
+        }
     }
 
 }
