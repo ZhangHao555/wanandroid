@@ -1,7 +1,10 @@
+import com.android.build.gradle.internal.dsl.SigningConfig
+
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.huawei.agconnect'
 
 android {
     compileSdkVersion 28
@@ -15,16 +18,41 @@ android {
 
         multiDexEnabled false
     }
+
+    signingConfigs {
+        release {
+            storeFile file('wanandroid.jks')
+            keyAlias 'key0'
+            keyPassword 'ahaowanandroid'
+            storePassword 'ahaowanandroid'
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
+
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
+
+
     androidExtensions {
         experimental = true
     }
+
+
+
 }
 
 dependencies {
@@ -58,6 +86,8 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'com.google.android.material:material:1.0.0'
 
+    //HUAWEI PUSH
+    implementation 'com.huawei.hms:push:3.0.3.301'
     //implementation 'com.squareup.okhttp3:logging-interceptor:3.14.1'
     //implementation 'com.android.support:multidex:1.0.3'
 }
