@@ -20,15 +20,24 @@ class MineFragment : BaseFragment() {
     }
 
     private fun initEvent() {
-        my_collection_container.setOnClickListener {
+      /*  my_collection_container.setOnClickListener {
             startActivity(Intent(activity,MyCollectionListActivity::class.java))
-        }
+        }*/
     }
 
     override fun getLayoutRes(): Int {
         return R.layout.fragment_mine_page
     }
 
+    override fun onPause() {
+        super.onPause()
+        gl_render.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        gl_render.onResume()
+    }
 
 
 }

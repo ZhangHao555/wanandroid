@@ -37,7 +37,7 @@ class MainActivity : BaseActivity() {
 
     override fun getResLayoutId() = R.layout.activity_main
     private var lastClickBackTime = 0L
-    private var fragments: List<Fragment> = listOf(HomePageFragment(), ProjectPageFragment(), SeriesTopicFragment(), NavFragment(), MineFragment())
+    private var fragments: List<Fragment> = listOf(MineFragment(), ProjectPageFragment(), SeriesTopicFragment(), NavFragment(), HomePageFragment())
     private var currentFragment: Fragment? = null
 
     private val icons = arrayOf(arrayOf(R.mipmap.home_page_selected,
