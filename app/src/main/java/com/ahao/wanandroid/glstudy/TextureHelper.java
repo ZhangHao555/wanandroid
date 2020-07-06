@@ -7,6 +7,8 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
 
+import com.ahao.wanandroid.App;
+
 public class TextureHelper {
 
     public static String TAG = "TextureHelper";
@@ -21,23 +23,25 @@ public class TextureHelper {
         }
 
         final BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inScaled = false;
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId, options);
 
         if (bitmap == null) {
             Log.w(TAG, "loadTexture:  resource id" + resourceId + "could not be decoded");
         }
 
-        GLES20.glBindTexture(GLES20.GL_TEXTURE, textureObjectIds[0]);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureObjectIds[0]);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR_MIPMAP_LINEAR);
         GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
 
         GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
         bitmap.recycle();
-
         GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
         GLES20.glBindTexture(GLES20.GL_TEXTURE, 0);
 
         return textureObjectIds[0];
+    }
+
+    public static int loadTexture(int resourceId) {
+        return loadTexture(App.context, resourceId);
     }
 }

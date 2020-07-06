@@ -2,6 +2,7 @@ package com.ahao.wanandroid.glstudy;
 
 import android.content.Context;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 import android.util.AttributeSet;
 
 import com.ahao.wanandroid.R;
@@ -89,12 +90,12 @@ public class AirHockeyRendererTexture extends GLSurfaceView implements GLSurface
         // Set the OpenGL viewport to fill the entire surface.
         glViewport(0, 0, width, height);
 
-        MatrixHelper.perspectiveM(projectionMatrix, 45, (float) width
+        Matrix.perspectiveM(projectionMatrix, 0,45, (float) width
                 / (float) height, 1f, 10f);
 
         setIdentityM(modelMatrix, 0);
         translateM(modelMatrix, 0, 0f, 0f, -2.5f);
-      /*  rotateM(modelMatrix, 0, -60f, 1f, 0f, 0f);*/
+        rotateM(modelMatrix, 0, -60f, 1f, 0f, 0f);
 
         final float[] temp = new float[16];
         multiplyMM(temp, 0, projectionMatrix, 0, modelMatrix, 0);

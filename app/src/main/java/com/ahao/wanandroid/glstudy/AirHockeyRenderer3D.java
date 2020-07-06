@@ -197,7 +197,7 @@ public class AirHockeyRenderer3D extends GLSurfaceView implements GLSurfaceView.
                 -1f, 1f);
         }
         */
-        MatrixHelper.perspectiveM(projectionMatrix, 45, (float) width
+        Matrix.perspectiveM(projectionMatrix,0, 45, (float) width
                 / (float) height, 1f, 10f);
 
         /*

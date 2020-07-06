@@ -18,10 +18,7 @@
 
         <activity android:name=".LaunchingActivity"
                   android:theme="@style/AppTheme.Splash">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+
 
         </activity>
 
@@ -31,6 +28,13 @@
         <activity android:name=".mine.MyCollectionListActivity" />
         <activity android:name=".search.SearchActivity"/>
 
+        <activity android:name=".glstudy2.GLActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>
