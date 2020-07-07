@@ -1,10 +1,7 @@
 package com.ahao.wanandroid.glstudy2;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 
-import com.ahao.wanandroid.App;
 import com.ahao.wanandroid.R;
 import com.ahao.wanandroid.glstudy.ShaderHelper;
 import com.ahao.wanandroid.glstudy.TextResourceReader;
@@ -15,12 +12,8 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 import static android.opengl.GLES20.GL_FLOAT;
-import static android.opengl.GLES20.GL_LINEAR;
-import static android.opengl.GLES20.GL_LINEAR_MIPMAP_LINEAR;
 import static android.opengl.GLES20.GL_TEXTURE0;
 import static android.opengl.GLES20.GL_TEXTURE_2D;
-import static android.opengl.GLES20.GL_TEXTURE_MAG_FILTER;
-import static android.opengl.GLES20.GL_TEXTURE_MIN_FILTER;
 import static android.opengl.GLES20.GL_TRIANGLE_FAN;
 import static android.opengl.GLES20.glActiveTexture;
 import static android.opengl.GLES20.glBindTexture;
@@ -85,6 +78,13 @@ public class SimpleTexture extends RenderElement {
         textureId = TextureHelper.loadTexture(textureResource);
 
 
+
+    }
+
+    @Override
+    public void render() {
+
+
         vertexBuffer.position(0);
         GLES20.glVertexAttribPointer(aPosition, 2, GL_FLOAT, false, 0, vertexBuffer);
         GLES20.glEnableVertexAttribArray(aPosition);
@@ -93,11 +93,6 @@ public class SimpleTexture extends RenderElement {
         GLES20.glVertexAttribPointer(aTextureCoordinatesLocation, 2, GL_FLOAT, false, 0, textureBuffer);
         GLES20.glEnableVertexAttribArray(aTextureCoordinatesLocation);
 
-    }
-
-    @Override
-    public void render() {
-        GLES20.glUseProgram(program);
         // Set the active texture unit to texture unit 0.
         glActiveTexture(GL_TEXTURE0);
 
@@ -112,5 +107,9 @@ public class SimpleTexture extends RenderElement {
 
     public int getMatrixLocation() {
         return uMatrixPosition;
+    }
+
+    public int getProgram(){
+        return program;
     }
 }

@@ -77,7 +77,7 @@ public class AirHockeyRendererTexture extends GLSurfaceView implements GLSurface
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
         table = new Table();
-        mallet = new Mallet();
+       // mallet = new Mallet();
 
         textureProgram = new TextureShaderProgram(context);
         colorProgram = new ColorShaderProgram(context);
@@ -116,7 +116,7 @@ public class AirHockeyRendererTexture extends GLSurfaceView implements GLSurface
 
         // Draw the mallets.
         colorProgram.useProgram();
-        colorProgram.setUniforms(projectionMatrix);
+        //colorProgram.setUniforms(projectionMatrix);
         mallet.bindData(colorProgram);
         mallet.draw();
     }

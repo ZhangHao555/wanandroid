@@ -20,6 +20,7 @@ abstract class ShaderProgram {
     protected static final String A_POSITION = "a_Position";
     protected static final String A_COLOR = "a_Color";
     protected static final String A_TEXTURE_COORDINATES = "a_TextureCoordinates";
+    protected static final String U_COLOR = "u_Color";
 
     // Shader program
     protected final int program;

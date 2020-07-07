@@ -47,7 +47,6 @@ public class Triangle extends RenderElement {
         vertexBuffer.position(0);
         GLES20.glVertexAttribPointer(aPosition, VERTEX_DATA_SIZE, GLES20.GL_FLOAT, false, 0, vertexBuffer);
         GLES20.glEnableVertexAttribArray(aPosition);
-
     }
 
 
