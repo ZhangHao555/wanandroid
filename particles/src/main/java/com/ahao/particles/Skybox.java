@@ -1,14 +1,16 @@
-package com.ahao.skybox;
+package com.ahao.particles;
+
+import android.opengl.GLES20;
 
 import java.nio.ByteBuffer;
 
-public class SkyBox {
+public class Skybox {
 
     private static final int POSITION_COMPONENT_COUNT = 3;
     private final VertexArray vertexArray;
     private final ByteBuffer indexArray;
 
-    public SkyBox() {
+    public Skybox() {
         vertexArray = new VertexArray(new float[]{
                 -1, 1, 1, // (0) Top-left near
                 1, 1, 1, // (1) Top-right near
@@ -25,7 +27,7 @@ public class SkyBox {
                         // Front
                         1, 3, 0,
                         0, 3, 2,
-                         // Back
+                        // Back
                         4, 6, 5,
                         5, 6, 7,
                         // Left
@@ -41,10 +43,15 @@ public class SkyBox {
                         6, 2, 7,
                         7, 2, 3
                 });
+        indexArray.position(0);
     }
 
-    public void bindData(SkyBoxShaderProgram skyboxShaderProgram){
-        vertexArray.setVertexAttribPointer(0,);
+    public void bindData(SkyboxShaderProgram skyboxShaderProgram) {
+        vertexArray.setVertexAttribPointer(0, skyboxShaderProgram.getaPositionLocation(), POSITION_COMPONENT_COUNT, 0);
+    }
 
+    public void draw() {
+
+        GLES20.glDrawElements(GLES20.GL_TRIANGLES, 36, GLES20.GL_UNSIGNED_BYTE, indexArray);
     }
 }

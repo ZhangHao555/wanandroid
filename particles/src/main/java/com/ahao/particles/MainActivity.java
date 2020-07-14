@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onScaleBegin(ScaleGestureDetector detector) {
                 float scaleFactor = detector.getScaleFactor();
-                particlesRender.setScale(scaleFactor);
+
                 return false;
             }
 
@@ -59,14 +59,6 @@ public class MainActivity extends AppCompatActivity {
                     case MotionEvent.ACTION_DOWN:
                         previousX = event.getX();
                         previousY = event.getY();
-                        glSurfaceView.queueEvent(new Runnable() {
-                            @Override
-                            public void run() {
-
-                                particlesRender.handleTouchPress(previousX, previousY);
-
-                            }
-                        });
                         return true;
                     case MotionEvent.ACTION_MOVE:
                         final float deltaX = event.getX() - previousX;
