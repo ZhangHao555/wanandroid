@@ -1,9 +1,12 @@
-package com.ahao.particles;
+package com.ahao.camera;
 
 import android.content.Context;
 import android.opengl.GLES20;
 
-public class ShaderProgram {
+import com.ahao.camera.util.ShaderUtil;
+
+public class Program {
+
     protected static final String U_MATRIX = "u_Matrix";
     protected static final String U_COLOR = "u_Color";
     protected static final String U_TEXTURE_UNIT = "u_TextureUnit";
@@ -17,24 +20,15 @@ public class ShaderProgram {
     protected static final String A_DIRECTION_VECTOR = "a_DirectionVector";
     protected static final String A_PARTICLE_START_TIME = "a_ParticleStartTime";
 
+    protected int program;
 
-    protected final int program;
-
-    protected ShaderProgram(Context context, int vertexShaderResourceId,
-                            int fragmentShaderResourceId) {
+    protected Program(Context context, int vertexShaderResourceId,
+                      int fragmentShaderResourceId) {
         // Compile the shaders and link the program.
-        program = ShaderHelper.buildProgram(
-                TextResourceReader
-                        .readTextFileFromResource(context, vertexShaderResourceId),
-                TextResourceReader
-                        .readTextFileFromResource(context, fragmentShaderResourceId));
+        program = ShaderUtil.createProgram(vertexShaderResourceId, fragmentShaderResourceId, context);
     }
 
-    public void useProgram() {
-        // Set the current OpenGL shader program to this program.
+    public void useProgram(){
         GLES20.glUseProgram(program);
-
-
     }
-
 }
