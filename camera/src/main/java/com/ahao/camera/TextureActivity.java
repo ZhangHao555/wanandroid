@@ -8,8 +8,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ahao.camera.util.VertexArray;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -17,7 +15,7 @@ import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
 import static android.opengl.GLES20.glClear;
 import static android.opengl.GLES20.glClearColor;
 
-public class TriangleActivity extends AppCompatActivity {
+public class TextureActivity extends AppCompatActivity {
 
     private GLSurfaceView.Renderer renderer;
 
@@ -31,7 +29,7 @@ public class TriangleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         glSurfaceView = new GLSurfaceView(this);
-        renderer = new TriangleRender();
+        renderer = new TextureRender();
 
         glSurfaceView.setEGLContextClientVersion(2);
         glSurfaceView.setRenderer(renderer);
@@ -52,14 +50,14 @@ public class TriangleActivity extends AppCompatActivity {
         glSurfaceView.onPause();
     }
 
-    private class TriangleRender implements GLSurfaceView.Renderer {
+    private class TextureRender implements GLSurfaceView.Renderer {
 
-        TriangleProgram triangleProgram;
+        TextureProgram textureProgram;
 
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-            triangleProgram = new TriangleProgram(TriangleActivity.this, R.raw.triangle_vertext, R.raw.triangle_shader_fragment);
+            textureProgram = new TextureProgram(TextureActivity.this, R.raw.texture_vertex_shader, R.raw.texture_fragment_shader1);
         }
 
         @Override
@@ -82,13 +80,9 @@ public class TriangleActivity extends AppCompatActivity {
         @Override
         public void onDrawFrame(GL10 gl) {
             glClear(GL_COLOR_BUFFER_BIT);
-
-            triangleProgram.useProgram();
-            triangleProgram.setColor(0.5f, 0f, 0f);
-            triangleProgram.setVertex();
-            GLES20.glUniformMatrix4fv(triangleProgram.getMatrix(), 1, false, mProjectionMatrix, 0);
-            GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 3);
-
+            GLES20.glUniformMatrix4fv(textureProgram.getMatrix(), 1, false, mProjectionMatrix, 0);
+            textureProgram.useProgram();
+            textureProgram.draw();
         }
     }
 }

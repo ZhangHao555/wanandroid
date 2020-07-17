@@ -23,6 +23,30 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:onClick="gotoTextureActivity"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#AE93EF"
+            android:gravity="center"
+            android:text="Texture Activity"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:onClick="gotoCameraActivity"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#93E144"
+            android:gravity="center"
+            android:text="Camera Activity"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
 
 

@@ -1,7 +1,10 @@
 package com.ahao.camera.util;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
 
 import com.ahao.camera.R;
 
@@ -21,6 +24,7 @@ public class ShaderUtil {
         try {
             while ((line = br.readLine()) != null) {
                 sb.append(line);
+                sb.append('\n');
             }
         } catch (Exception ignored) {
 
@@ -51,8 +55,8 @@ public class ShaderUtil {
     }
 
     public static int createProgram(int shaderVertexResource, int shaderFragmentResource, Context context) {
-        int vertexId = compileShaderCode(GLES20.GL_VERTEX_SHADER, readShader(R.raw.triangle_vertext, context));
-        int fragmentId = compileShaderCode(GLES20.GL_FRAGMENT_SHADER, readShader(R.raw.triangle_shader_fragment, context));
+        int vertexId = compileShaderCode(GLES20.GL_VERTEX_SHADER, readShader(shaderVertexResource, context));
+        int fragmentId = compileShaderCode(GLES20.GL_FRAGMENT_SHADER, readShader(shaderFragmentResource, context));
 
         int programId = GLES20.glCreateProgram();
 
@@ -67,4 +71,33 @@ public class ShaderUtil {
 
         return programId;
     }
+
+    public static int loadTexture(Context context, int resourceId) {
+        final int[] textureId = new int[1];
+        GLES20.glGenTextures(1, textureId, 0);
+        if (textureId[0] == 0) {
+            throw new RuntimeException("create texture failed");
+        }
+
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inScaled = false;
+
+        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resourceId);
+        if (bitmap == null) {
+            GLES20.glDeleteTextures(1, textureId, 0);
+            throw new RuntimeException("create bitmap failed");
+        }
+
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId[0]);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR_MIPMAP_LINEAR);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+        bitmap.recycle();
+        GLES20.glGenerateMipmap(GLES20.GL_TEXTURE_2D);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
+
+        return textureId[0];
+    }
+
 }

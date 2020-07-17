@@ -16,9 +16,12 @@ public class Program {
     protected static final String A_POSITION = "a_Position";
     protected static final String A_COLOR = "a_Color";
     protected static final String A_TEXTURE_COORDINATES = "a_TextureCoordinates";
+    protected static final String A_COORDINATE = "a_Coordinate";
+    protected static final String U_COORDINATEMATRIX = "u_CoordinateMatrix";
 
     protected static final String A_DIRECTION_VECTOR = "a_DirectionVector";
     protected static final String A_PARTICLE_START_TIME = "a_ParticleStartTime";
+    protected static final String U_CHANGE_COLOR = "u_ChangeColor";
 
     protected int program;
 
