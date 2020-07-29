@@ -1,6 +1,9 @@
 package com.ahao.wanandroid.baseview
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager.PERMISSION_DENIED
+import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +14,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.FragmentActivity
 import com.ahao.wanandroid.R
 import com.ahao.wanandroid.rxbus.RxBus
@@ -85,5 +89,21 @@ abstract class BaseActivity : AppCompatActivity() {
     protected fun setStatusBarColor(color: Int) {
         statusView.setBackgroundColor(color)
     }
+
+    protected fun requestPermission(permission : Array<String>){
+        val notGrantedPermission = mutableListOf<String>()
+
+        for (s in permission) {
+            val checkSelfPermission = ActivityCompat.checkSelfPermission(this, s)
+            if(checkSelfPermission == PERMISSION_DENIED){
+                notGrantedPermission.add(s)
+            }
+        }
+        if(notGrantedPermission.isNotEmpty()){
+            ActivityCompat.requestPermissions(this,notGrantedPermission.toTypedArray(),11)
+        }
+    }
+
+
 
 }

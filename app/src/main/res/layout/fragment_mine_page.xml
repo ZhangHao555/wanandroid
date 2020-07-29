@@ -81,7 +81,6 @@
             android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/bg">
-<!--
             <LinearLayout
                 android:id="@+id/my_collection_container"
                 android:layout_width="match_parent"
@@ -156,12 +155,48 @@
                     android:src="@mipmap/arrow_right"
                     tools:ignore="ContentDescription" />
 
-            </LinearLayout>-->
+            </LinearLayout>
 
-            <com.ahao.wanandroid.glstudy.AirHockeyRendererTexture
-                android:id="@+id/gl_render"
+            <LinearLayout
+                android:id="@+id/my_music_container"
                 android:layout_width="match_parent"
-                android:layout_height="400dp" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="13dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="0"
+                    android:src="@mipmap/icon_hot_search"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingStart="10dp"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:text="我的音乐"
+                    tools:ignore="HardcodedText" />
+
+                <ImageView
+                    android:id="@+id/my_music"
+                    android:layout_width="33dp"
+                    android:layout_height="25dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="0"
+                    android:paddingTop="5dp"
+                    android:paddingEnd="20dp"
+                    android:paddingBottom="5dp"
+                    android:src="@mipmap/arrow_right"
+                    tools:ignore="ContentDescription" />
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
 

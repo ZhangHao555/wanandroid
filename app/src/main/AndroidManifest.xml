@@ -5,20 +5,26 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
-            android:allowBackup="true"
-            android:icon="@mipmap/launching"
-            android:label="@string/app_name"
-            android:supportsRtl="true"
-            android:name=".App"
-            android:theme="@style/AppTheme"
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@mipmap/launching"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity">
-        </activity>
+        <activity android:name=".MainActivity"></activity>
 
-        <activity android:name=".LaunchingActivity"
-                  android:theme="@style/AppTheme.Splash">
-
+        <activity
+            android:name=".LaunchingActivity"
+            android:theme="@style/AppTheme.Splash">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
 
@@ -26,15 +32,16 @@
         <activity android:name=".user.RegisterActivity" />
         <activity android:name=".InfoDetailActivity" />
         <activity android:name=".mine.MyCollectionListActivity" />
-        <activity android:name=".search.SearchActivity"/>
+        <activity android:name=".search.SearchActivity" />
 
         <activity android:name=".glstudy2.GLActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+
 
         </activity>
+
+        <activity
+            android:name=".mymusic.MyMusicActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
